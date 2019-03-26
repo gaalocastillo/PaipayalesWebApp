@@ -42,6 +42,8 @@ INSTALLED_APPS = [
 
     # project app
     'inventory.apps.InventoryConfig',
+
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

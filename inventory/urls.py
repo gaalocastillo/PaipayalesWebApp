@@ -7,4 +7,8 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)$', detail, name="detail"),
     url(r'^edit/(?P<pk>\d+)$', edit, name="edit"),
     url(r'^addnew$', addnew, name="addnew"),
+
+    url(r'^products/(?P<cat>\w+)$', ListProductsView.as_view(), name="products-all"),
+    url('auth/register/', RegisterUsers.as_view(), name="auth-register"),
+
 ]

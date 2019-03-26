@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils import timezone
+
 #from phonenumber_field.modelfields import PhoneNumberField
 
 TYPE_SELLING_CHOICES = (
@@ -33,17 +35,15 @@ class Product(models.Model):
     def __str__(self):
         return 'Id:{0} Name:{1}'.format(self.id, self.name) 
 
+class Purchase(models.Model):
+    dateCreated = models.DateTimeField(default=timezone.now)
+#    order = JSONField()            This field will be included when start using postgresql
+    totalPrice = models.FloatField(null=True, blank=True, default=0.0)
 
+    def __str__(self):
+        return self.id
 
 """
 class Sector(models.Model):
     name = models.CharField(max_length=100, blank=False, null=False)
-
-
-
-class Category(models.Model):
-    name = models.CharField(max_length=100, blank=False, null=False)
-
-    def __str__(self):
-        return 'Name:{1}'.format(self.name)
 """
