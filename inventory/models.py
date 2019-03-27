@@ -8,12 +8,19 @@ TYPE_SELLING_CHOICES = (
     ("weight", "WEIGHT")
 )
 
+class UserZone(models.Model):
+    name = models.CharField(max_length=100, blank=False, null=False, unique=True)
+
+    def __str__(self):
+        return self.name
+
 class User(models.Model):
     name = models.CharField(max_length=100, blank=False, null=False)
 #    phone = PhoneNumberField(null=False, blank=False)
     email = models.EmailField(max_length=70,blank=True, unique=True)
     password = models.CharField(max_length=15)
     address = models.CharField(max_length=150, blank=True, null=False)
+    userZone = models.ForeignKey(UserZone, to_field="name", on_delete=models.PROTECT, null=True, blank=True)
 
     def __str__(self):
         return 'Id:{0} Name:{1}'.format(self.id, self.name)
@@ -42,8 +49,3 @@ class Purchase(models.Model):
 
     def __str__(self):
         return self.id
-
-"""
-class Sector(models.Model):
-    name = models.CharField(max_length=100, blank=False, null=False)
-"""

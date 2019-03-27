@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import Http404
 from .models import Product
 from .models import Category
+from .models import UserZone
 from .models import User
 from .forms import ProductForm
 
@@ -36,10 +37,11 @@ class RegisterUsers(generics.CreateAPIView):
         email = request.data.get("email", "")
         password = request.data.get("password", "")
         address = request.data.get("address", "")
-        if not name or not password or not email or not address:
+        userZone = request.data.get("userZone", "")
+        if not name or not password or not email or not address or not userZone:
             return Response(
                 data={
-                    "message": "name, address, email and password is required to register a user"
+                    "message": "name, address, userZone, email and password is required to register a user"
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
@@ -50,8 +52,18 @@ class RegisterUsers(generics.CreateAPIView):
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
+        try:
+            userZoneObj = UserZone.objects.get(name=userZone)
+        except UserZone.DoesNotExist:
+            return Response(
+                data={
+                    "message": "The sent userZone does not exist"
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
         new_user = User.objects.create(
-            name=name, password=password, email=email, address=address
+            name=name, password=password, email=email, address=address, userZone=userZoneObj
         )
         return Response(
             data=UserSerializer(new_user).data,
