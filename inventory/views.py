@@ -9,6 +9,7 @@ from rest_framework import generics
 from rest_framework import permissions
 from .serializers import ProductSerializer
 from .serializers import UserSerializer
+from .serializers import LoginSerializer
 from rest_framework.response import Response
 from rest_framework.views import status
 
@@ -42,6 +43,13 @@ class RegisterUsers(generics.CreateAPIView):
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
+        if not isValidEmail(email):
+            return Response(
+                data={
+                    "message": "The email entered already has an account associated."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
         new_user = User.objects.create(
             name=name, password=password, email=email, address=address
         )
@@ -49,7 +57,48 @@ class RegisterUsers(generics.CreateAPIView):
             data=UserSerializer(new_user).data,
             status=status.HTTP_201_CREATED
         )
-  
+
+class LoginUser(generics.CreateAPIView):
+    """
+    POST auth/login/
+    """
+    permission_classes = (permissions.AllowAny,)
+    serializer_class = LoginSerializer
+
+    def post(self, request, *args, **kwargs):
+        email = request.data.get("email", "")
+        password = request.data.get("password", "")
+        if not password or not email:
+            return Response(
+                data={
+                    "message": "email and password are required to login a user"
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        if not isValidLogin(email=email, password=password):
+            return Response(
+                data={
+                    "message": "Invalid credentials."
+                },
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+        return Response(
+            status=status.HTTP_200_OK
+        )
+
+def isValidEmail(email):
+    """
+    Method used for identifying duplicated emails when registering
+    a new user account.
+    """
+    return not User.objects.filter(email=email).exists()
+
+def isValidLogin(email, password):
+    """
+    Method used for validating a user crendentials.
+    """
+    return User.objects.filter(email=email, password=password).exists()
+
 def index(request):
     products = Product.objects.all()
     context = {'products': products}

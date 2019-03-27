@@ -10,5 +10,5 @@ urlpatterns = [
 
     url(r'^products/(?P<cat>\w+)$', ListProductsView.as_view(), name="products-all"),
     url('auth/register/', RegisterUsers.as_view(), name="auth-register"),
-
+    url('auth/login/', LoginUser.as_view(), name="auth-login"),
 ]

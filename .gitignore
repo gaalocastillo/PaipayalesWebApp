@@ -1,2 +1,4 @@
 /env/
 /inventory/migrations/
+inventoryms/__pycache__
+inventory/__pycache__
