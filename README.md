@@ -34,6 +34,7 @@
 	```
 
 ***Name:*** User registration
+
 ***Description:*** Register a user by obtaining its information.
 ***Method:*** POST
 	```
