@@ -10,6 +10,7 @@ from rest_framework import generics
 from rest_framework import permissions
 from .serializers import ProductSerializer
 from .serializers import UserSerializer
+from .serializers import UserZoneSerializer
 from .serializers import LoginSerializer
 from rest_framework.response import Response
 from rest_framework.views import status
@@ -97,6 +98,16 @@ class LoginUser(generics.CreateAPIView):
         return Response(
             status=status.HTTP_200_OK
         )
+
+class ListUserZonesView(generics.ListCreateAPIView):
+    """
+    Provides a get method handler.
+    """
+    serializer_class = UserZoneSerializer
+    
+    def get_queryset(self):
+        queryset = UserZone.objects.all()
+        return queryset
 
 def isValidEmail(email):
     """

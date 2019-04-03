@@ -37,6 +37,17 @@
 	```
 
 
+***Name:*** Get user zones
+
+***Description:*** Get a list of the zones where a user may live.
+
+***Method:*** GET
+
+	```
+	/api/v1/userZones/
+	```
+
+
 ***Name:*** User registration
 
 ***Description:*** Register a user by obtaining its information.
