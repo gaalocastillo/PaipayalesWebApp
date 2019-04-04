@@ -9,8 +9,14 @@ TYPE_SELLING_CHOICES = (
     ("weight", "WEIGHT")
 )
 
+PRODUCTS_IMAGES_DIR = 'images/products_pics' 
+PROFILE_IMAGES_DIR = 'images/profile_pics' 
+
 def get_image_path(instance, filename):
-    return '/'.join(['images/profile_pics', str(instance.id), filename])
+    return '/'.join([PROFILE_IMAGES_DIR, str(instance.id), filename])
+
+def getProdImagePath(instance, filename):
+    return '/'.join([PRODUCTS_IMAGES_DIR, str(instance.id), filename])
 
 class UserZone(models.Model):
     name = models.CharField(max_length=100, blank=False, null=False, unique=True)
@@ -40,7 +46,7 @@ class Category(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=200, blank=False, null=False)
     description = models.TextField(blank=True, null=True, default="")
-    #photo =
+    photo = models.ImageField(upload_to=getProdImagePath, blank=True, null=True)
     typeSelling = models.CharField(max_length=20, choices=TYPE_SELLING_CHOICES, default='unit')
     price = models.FloatField(null=True, blank=True, default=0.0)
     category = models.ForeignKey(Category, to_field="name" ,on_delete=models.CASCADE, null=False, default="General", blank=False)
