@@ -2,3 +2,5 @@ django==2.0
 pytz==2017.2
 psycopg2==2.7.7
 djangorestframework==3.9.2
+django-phonenumber-field
+phonenumbers

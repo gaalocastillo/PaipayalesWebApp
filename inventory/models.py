@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
-#from phonenumber_field.modelfields import PhoneNumberField
+from phonenumber_field.modelfields import PhoneNumberField
 
 TYPE_SELLING_CHOICES = (
     ("unit", "UNIT"),
@@ -16,7 +16,7 @@ class UserZone(models.Model):
 
 class User(models.Model):
     name = models.CharField(max_length=100, blank=False, null=False)
-#    phone = PhoneNumberField(null=False, blank=False)
+    phoneNumber = PhoneNumberField(null=False, blank=False, unique=True, default="")
     email = models.EmailField(max_length=70,blank=True, unique=True)
     password = models.CharField(max_length=15)
     address = models.CharField(max_length=150, blank=True, null=False)
@@ -38,6 +38,7 @@ class Product(models.Model):
     typeSelling = models.CharField(max_length=20, choices=TYPE_SELLING_CHOICES, default='unit')
     price = models.FloatField(null=True, blank=True, default=0.0)
     category = models.ForeignKey(Category, to_field="name" ,on_delete=models.CASCADE, null=False, default="General", blank=False)
+    isAvailable = models.BooleanField(default=True)
 
     def __str__(self):
         return 'Id:{0} Name:{1}'.format(self.id, self.name) 
