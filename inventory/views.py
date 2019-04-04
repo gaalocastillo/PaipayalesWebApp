@@ -39,6 +39,7 @@ class RegisterUsers(generics.CreateAPIView):
         password = request.data.get("password", "")
         address = request.data.get("address", "")
         userZone = request.data.get("userZone", "")
+        file = request.data['file']
         if not name or not password or not email or not address or not userZone:
             return Response(
                 data={
@@ -66,6 +67,7 @@ class RegisterUsers(generics.CreateAPIView):
         new_user = User.objects.create(
             name=name, password=password, email=email, address=address, userZone=userZoneObj
         )
+        new_user.update(profileImage=file)
         return Response(
             data=UserSerializer(new_user).data,
             status=status.HTTP_201_CREATED

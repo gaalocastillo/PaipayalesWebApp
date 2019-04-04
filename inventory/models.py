@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+import os
 
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -8,6 +9,9 @@ TYPE_SELLING_CHOICES = (
     ("weight", "WEIGHT")
 )
 
+def get_image_path(instance, filename):
+    return '/'.join(['images/profile_pics', str(instance.id), filename])
+
 class UserZone(models.Model):
     name = models.CharField(max_length=100, blank=False, null=False, unique=True)
 
@@ -15,11 +19,13 @@ class UserZone(models.Model):
         return self.name
 
 class User(models.Model):
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100, blank=False, null=False)
     phoneNumber = PhoneNumberField(null=False, blank=False, unique=True, default="")
     email = models.EmailField(max_length=70,blank=True, unique=True)
     password = models.CharField(max_length=15)
     address = models.CharField(max_length=150, blank=True, null=False)
+    profileImage = models.ImageField(upload_to=get_image_path, blank=True, null=True)
     userZone = models.ForeignKey(UserZone, to_field="name", on_delete=models.PROTECT, null=True, blank=True)
 
     def __str__(self):

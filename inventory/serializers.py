@@ -12,7 +12,7 @@ class ProductSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("name", "email", "phoneNumber", "password", "address", "userZone")
+        fields = ("name", "email", "phoneNumber", "profileImage", "password", "address", "userZone")
 
 class LoginSerializer(serializers.ModelSerializer):
     class Meta:
