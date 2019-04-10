@@ -1,12 +1,13 @@
 from django.db import models
 from django.utils import timezone
 import os
+import uuid
 
 from phonenumber_field.modelfields import PhoneNumberField
 
 TYPE_SELLING_CHOICES = (
-    ("unit", "UNIT"),
-    ("weight", "WEIGHT")
+    ("unit", "Unidad"),
+    ("weight", "Libra")
 )
 
 PRODUCTS_IMAGES_DIR = 'images/products_pics' 
@@ -25,7 +26,7 @@ class UserZone(models.Model):
         return self.name
 
 class User(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4(), editable=False)
     name = models.CharField(max_length=100, blank=False, null=False)
     phoneNumber = PhoneNumberField(null=False, blank=False, unique=True, default="")
     email = models.EmailField(max_length=70,blank=True, unique=True)
@@ -44,6 +45,7 @@ class Category(models.Model):
         return self.name
 
 class Product(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4(), editable=False)
     name = models.CharField(max_length=200, blank=False, null=False)
     description = models.TextField(blank=True, null=True, default="")
     photo = models.ImageField(upload_to=getProdImagePath, blank=True, null=True)

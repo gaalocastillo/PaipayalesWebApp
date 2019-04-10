@@ -19,6 +19,5 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^', include('inventory.urls')),
-    re_path('api/(?P<version>(v1|v2))/', include('inventory.urls')),
     url(r'^admin/', admin.site.urls),
 ]

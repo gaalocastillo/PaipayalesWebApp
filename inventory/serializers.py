@@ -5,9 +5,11 @@ from .models import User
 from .models import UserZone
 
 class ProductSerializer(serializers.ModelSerializer):
+# https://stackoverflow.com/questions/32219130/django-rest-framework-imagefield-to-server?rq=1
+
     class Meta:
         model = Product
-        fields = ("name", "typeSelling", "price")
+        fields = ("name", "typeSelling", "price", "photo")
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

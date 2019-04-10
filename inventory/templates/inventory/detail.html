@@ -2,14 +2,30 @@
 {% block content %}
 
 
-    <h1>Product Information</h1>
+    <h1>Información del Producto</h1>
 
-        <div class="buttion_place">
-            <a href="{% url 'edit' product.pk %}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true"> + Edit Product</a>
+<!--        <div class="buttion_place">
+            <a href="{% url 'edit' product.pk %}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true"> + Editar Producto</a>
         </div>
-
-       <label><h5>Name</h5></label>:  {{ product.name }} <br>
-       <label><h5>Unit Price</h5></label>: {{ product.price }}<br>
-       <label><h5>Description</h5>{{ product.description }}</label>
+-->
+       <label><h5>Nombre</h5></label>:  {{ product.name }} <br>
+       <label><h5>Precio</h5></label>: ${{ product.price }}<br>
+       <label><h5>Descripción</h5></label>: {{ product.description }}</label><br>
+       <label><h5>Tipo de venta</h5></label>: 
+            {% if product.typeSelling == "unit" %}
+                Unidad
+            {% else %}
+                Libra
+            {% endif %}
+        </label><br>
+        <label><h5>Categoría</h5></label>: {{ product.category }}</label><br>
+        <label><h5>Disponibilidad</h5></label>: 
+            {% if product.isAvailable == True %}
+                Disponible
+            {% else %}
+                No disponible
+            {% endif %}
+        </label><br>
+        <img src={{ product.photo }}>
 
 {% endblock %}

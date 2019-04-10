@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import Http404
+
 from .models import Product
 from .models import Category
 from .models import UserZone
@@ -65,9 +66,9 @@ class RegisterUsers(generics.CreateAPIView):
             )
         
         new_user = User.objects.create(
-            name=name, password=password, email=email, address=address, userZone=userZoneObj
+            name=name, password=password, email=email, address=address, userZone=userZoneObj, profileImage=file
         )
-        new_user.update(profileImage=file)
+#        new_user.update(profileImage=file)
         return Response(
             data=UserSerializer(new_user).data,
             status=status.HTTP_201_CREATED

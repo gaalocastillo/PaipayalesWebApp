@@ -4,12 +4,12 @@ from .views import *
 urlpatterns = [
     url(r'^$', index, name="index"),
     # url(r'^(?P<product_id>[0-9]+)$', detail, name="detail"),
-    url(r'^(?P<pk>\d+)$', detail, name="detail"),
-    url(r'^edit/(?P<pk>\d+)$', edit, name="edit"),
-    url(r'^addnew$', addnew, name="addnew"),
+    url(r'^(?P<pk>[\w-]+)$', detail, name="detail"),
+    url(r'^edit/(?P<pk>[\w-]+)$', edit, name="edit"),
+    url(r'^addnew/$', addnew, name="addnew"),
 
-    url(r'^products/(?P<cat>\w+)$', ListProductsView.as_view(), name="products-all"),
-    url(r'^userZones/$', ListUserZonesView.as_view(), name="user-zones-all"),
-    url('auth/register/', RegisterUsers.as_view(), name="auth-register"),
-    url('auth/login/', LoginUser.as_view(), name="auth-login"),
+    url(r'^api/v1/products/(?P<cat>\w+)$', ListProductsView.as_view(), name="products-all"),
+    url(r'^api/v1/userZones/$', ListUserZonesView.as_view(), name="user-zones-all"),
+    url('api/v1/auth/register/', RegisterUsers.as_view(), name="auth-register"),
+    url('api/v1/auth/login/', LoginUser.as_view(), name="auth-login"),
 ]

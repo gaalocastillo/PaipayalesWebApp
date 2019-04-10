@@ -3,30 +3,44 @@
 {% block content %}
 
     <div class="buttion_place">
-        <a href="{% url 'addnew' %}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true"> + Add Product</a>
+        <a href="{% url 'addnew' %}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true"> + Añadir Producto</a>
     </div>
 
     <table class="table table-hover">
         <thead>
         <tr>
-            <th>#</th>
-            <th> Name</th>
-            <th>Price</th>
-            <th>Type of selling</th>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Tipo de venta</th>
+            <th>Categoría</th>
+            <th>Disponibilidad</th>
         </tr>
         </thead>
         <tbody>
         {% for product in products %}
-
             <tr>
-                <th>
-                    <a href="{% url 'detail' product.pk %}">
-                        {{ product.pk }}
-                    </a>
-                </th>
                 <td>{{ product.name }}</td>
-                <td>{{ product.price }}</td>
-                <td>{{ product.typeSelling }}</td>
+                <td>{{ product.price }} USD</td>
+                {% if product.typeSelling == "unit" %}
+                    <td>Unidad</td>
+                {% else %}
+                    <td>Libra</td>
+                {% endif %}
+                <td>{{ product.category }}</td>
+                {% if product.isAvailable == True %}
+                    <td>Disponible</td>
+                {% else %}
+                    <td>No disponible</td>
+                {% endif %}
+                <th>
+                        <a href="{% url 'detail' product.pk %}">
+                            Ver más
+                        </a>
+                </th>
+                <td><a href="{% url 'edit' product.pk %}">Editar Producto</a></td>
+
+                
+
             </tr>
         {% endfor %}
 

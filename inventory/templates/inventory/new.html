@@ -1,5 +1,5 @@
 {% extends 'inventory/base.html' %} {% block content %}
-<h2 class="product_heder">Add a new Product </h1>
+<h2 class="product_heder">Añada un nuevo producto </h1>
 
 <div class="container col-md-10">
     <form  method="POST">
@@ -8,18 +8,15 @@
       {% for field in form %}
         <div class="form-group row">
             <label for="id_{{ field.name }}" class="col-2 col-form-label">{{ field.label }}</label>
-
             <div class="col-10">
-
                 {{ field }}
             </div>
         </div>
         {% endfor %}
 
-
         <div class="form-group row">
             <div class="offset-sm-2 col-sm-6">
-                <button type="submit" class="btn btn-primary">Add Product</button>
+                <button type="submit" class="btn btn-primary">Añadir Producto</button>
             </div>
         </div>
     </form>
