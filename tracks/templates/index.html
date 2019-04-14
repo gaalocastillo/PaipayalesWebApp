@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title%}Paipay tracker{% endblock %}
+		
+{% block styles %}
+<link rel="stylesheet" href="{% static 'tracks/css/map_style.css' %}" type="text/css">
+{% endblock %}
+{% block content %}
+
+	<div id="mapdiv" class="map"></div>
+
+{% endblock %}
+{% block scripts_body %}
+   
+  <script type= "text/javascript" src="{% static 'tracks/js/display_last_locations.js' %}"></script>
+	
+{% endblock %}

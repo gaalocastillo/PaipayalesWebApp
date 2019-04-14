@@ -7,3 +7,12 @@ phonenumbers
 Pillow==6.0.0
 django-cors-headers==2.5.2
 djangorestframework-jwt==1.11.0
+GDAL==2.1.0
+jsonfield==2.0.2
+pipenv==2018.11.26
+pycairo==1.16.2
+simplejson==3.16.0
+django-extra-fields
+#channels
+#asgi_redis
+#coreapi pyyaml

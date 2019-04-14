@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '@0v4ijsud7wm(&0m+!5tb4key7_$k*m8hy2j2jm2h5yzbld4d#'
+SECRET_KEY = ''
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,17 +37,20 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    'django.contrib.gis',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
     'corsheaders',
+    'rest_framework',
 
     # project app
     'inventory.apps.InventoryConfig',
 
     'rest_framework',
     'rest_framework.authtoken',
+    'tracks',
 ]
 
 REST_FRAMEWORK = {
@@ -87,6 +90,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'inventoryms.urls'
+AUTH_USER_MODEL = 'inventory.User'
+
 
 TEMPLATES = [
     {
@@ -157,3 +162,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+STATIC_ROOT = os.path.join(BASE_DIR,'static')

@@ -1,0 +1,58 @@
+{% load static %}
+
+<html>
+	<head>
+
+	    <title>{% block title%}{% endblock %}</title>
+	    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+   integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+   crossorigin=""/>
+<link rel="stylesheet" href="{% static 'tracks/routing/leaflet-routing-machine.css' %}" type="text/css">
+
+		<link rel="stylesheet" href="{% static 'tracks/css/base_style.css' %}" type="text/css">
+
+
+	    {% block styles %}
+		{% endblock %}
+		<!-- Make sure you put this AFTER Leaflet's CSS -->
+ <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+   integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+   crossorigin=""></script>
+
+<!-- header -->
+<h1><a href="{% url 'home' %}"><img src="{% static 'tracks/img/paipay_logo.jpeg' %}" alt="Paipay" width="300"></a></h1>
+<!-- menu -->
+
+	</head>
+
+	<body>
+		<ul class="nav">
+	<li>
+			<a href="{% url 'home' %}">Ubicaciones</a>
+	</li>
+	<li>
+			<a href="{% url 'rutas' %}">Rutas</a>
+	</li>
+	<li>
+			<span><a href="/api">API</a></span>
+	</li>
+	<li>
+			<span><a href="download.html">Documentaci&oacuten</a></span>
+	</li>
+	
+	
+</ul>
+<!-- end of menu -->
+
+		{% block content %}
+		{% endblock %}
+
+	</body>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src= "{% static 'tracks/js/base.js' %}"></script>
+	<script src= "{% static 'tracks/routing/leaflet-routing-machine.js' %}"></script>
+
+	{% block scripts_body %}
+	{% endblock %}
+
+</html>

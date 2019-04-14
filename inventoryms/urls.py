@@ -15,9 +15,12 @@ Including another URLconf
 """
 from django.conf.urls import url, include, re_path
 from django.contrib import admin
+from django.contrib.gis import admin
 
 
 urlpatterns = [
     url(r'^', include('inventory.urls')),
+    url(r'^', include('tracks.urls')),
+
     url(r'^admin/', admin.site.urls),
 ]

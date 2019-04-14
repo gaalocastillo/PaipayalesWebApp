@@ -4,7 +4,7 @@ from django.conf import settings
 from django.utils import timezone
 import os
 import uuid
-
+from django.contrib.auth.models import AbstractUser
 from phonenumber_field.modelfields import PhoneNumberField
 from django.contrib.auth.models import BaseUserManager
 
@@ -57,14 +57,14 @@ class UserZone(models.Model):
     def __str__(self):
         return self.name
 
-class User(models.Model):
-    REQUIRED_FIELDS = ('user',)
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4(), editable=False)
-    name = models.CharField(max_length=100, blank=False, null=False)
+
+class User(AbstractUser):
+    ''' Inherits from django User: id, username, first_name, last_name, password,
+    email, last_login, is_staff, i_active, date_joined, is_superuser
+
+    '''
     phoneNumber = PhoneNumberField(null=False, blank=False, unique=True, default="")
-    email = models.EmailField(max_length=70,blank=True, unique=True)
-    password = models.CharField(max_length=15)
-    address = models.CharField(max_length=150, blank=True, null=False)
+    address = models.CharField(max_length=150, blank=True, null=False, default="")
     profileImage = models.ImageField(upload_to=get_image_path, blank=True, null=True)
     userZone = models.ForeignKey(UserZone, to_field="name", on_delete=models.PROTECT, null=True, blank=True)
     role = models.IntegerField(default=CLIENT, choices=USER_ROLE_CHOICES)
@@ -75,8 +75,9 @@ class User(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-        return 'Id:{0} Name:{1}'.format(self.id, self.name)
+        return 'Id:{0} Name:{1}'.format(self.id, self.first_name)
 
+    
 class Category(models.Model):
     name = models.CharField(max_length=100, blank=False, null=False, unique=True)
 
