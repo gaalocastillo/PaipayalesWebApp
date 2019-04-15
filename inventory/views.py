@@ -46,13 +46,14 @@ class RegisterUsers(generics.CreateAPIView):
         name = request.data.get("name", "")
         email = request.data.get("email", "")
         password = request.data.get("password", "")
+        phoneNumber = request.data.get("phoneNumber", "")
         address = request.data.get("address", "")
         userZone = request.data.get("userZone", "")
         file = request.data['file']
-        if not name or not password or not email or not address or not userZone:
+        if not name or not password or not email or not address or not userZone or not phoneNumber:
             return Response(
                 data={
-                    "message": "name, address, userZone, email and password is required to register a user"
+                    "message": "name, address, userZone, email, phoneNumber and password is required to register a user"
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
@@ -74,20 +75,13 @@ class RegisterUsers(generics.CreateAPIView):
             )
         
         new_user = User.objects.create(
-            name=name, password=password, email=email, address=address, userZone=userZoneObj, profileImage=file,
-            token=None
-        )
-#        new_user.update(profileImage=file)
+            name=name, password=password, email=email, address=address, userZone=userZoneObj, 
+                phoneNumber=phoneNumber, profileImage=file, token=None)
         token = create_token(new_user)
         new_user.token = str(token)
         new_user.save()
         data = {"access-token": new_user.token}
-        return HttpResponse(json.dumps(data, ensure_ascii=False).encode("utf-8")\
-        , content_type='application/json')
-        """return Response(
-            data=UserSerializer(new_user).data,
-            status=status.HTTP_201_CREATED
-        )"""
+        return HttpResponse(json.dumps(data, ensure_ascii=False).encode("utf-8"), content_type='application/json')
 
 class LoginUser(generics.CreateAPIView):
     """
