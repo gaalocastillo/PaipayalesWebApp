@@ -13,8 +13,23 @@ TYPE_SELLING_CHOICES = (
     ("weight", "Libra")
 )
 
+SOLICITADO = 0
+ARMADO = 1
+POR_ENVIAR = 2
+ENTREGADO = 3
+CANCELADO = -1
+
+PURCHASE_STATE_CHOICES = (
+    (SOLICITADO, "Solicitado"),
+    (ARMADO, "Armado"),
+    (POR_ENVIAR, "Por enviar"),
+    (ENTREGADO, "Entregado"),
+    (CANCELADO, "Cancelado"),
+)
+
 PRODUCTS_IMAGES_DIR = 'images/products_pics' 
-PROFILE_IMAGES_DIR = 'images/profile_pics' 
+PROFILE_IMAGES_DIR = 'images/profile_pics'
+ORDER_EVIDENCES_DIR = 'images/orders_evidence_pics'
 AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.user')
 
 def get_image_path(instance, filename):
@@ -22,6 +37,9 @@ def get_image_path(instance, filename):
 
 def getProdImagePath(instance, filename):
     return '/'.join([PRODUCTS_IMAGES_DIR, str(instance.id), filename])
+
+def getOrderEvidenceImagePath(instance, filename):
+    return '/'.join([ORDER_EVIDENCES_DIR, str(instance.id), filename])
 
 class UserZone(models.Model):
     name = models.CharField(max_length=100, blank=False, null=False, unique=True)
@@ -69,8 +87,13 @@ class Product(models.Model):
 
 class Purchase(models.Model):
     dateCreated = models.DateTimeField(default=timezone.now)
+    products = models.CharField(max_length=200, blank=False, null=False, default='{}')
 #    order = JSONField()            This field will be included when start using postgresql
     totalPrice = models.FloatField(null=True, blank=True, default=0.0)
+    state = models.IntegerField(default=SOLICITADO, choices=PURCHASE_STATE_CHOICES)
+    barCode = models.CharField(max_length=200, blank=True, null=True, default='{}')
+    photo = models.ImageField(upload_to=getOrderEvidenceImagePath, blank=True, null=True)
+    deliveryMan = models.ForeignKey(User, to_field="id", on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.id
