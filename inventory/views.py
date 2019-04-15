@@ -8,6 +8,8 @@ from .models import Product
 from .models import Category
 from .models import UserZone
 from .models import User
+from .models import Purchase
+from .models import DELIVERY_MAN
 from .forms import ProductForm
 
 from rest_framework import generics
@@ -16,6 +18,9 @@ from .serializers import ProductSerializer
 from .serializers import UserSerializer
 from .serializers import UserZoneSerializer
 from .serializers import LoginSerializer
+from .serializers import DeliveryManListSerializer
+from .serializers import PurchaseStateSerializer
+
 from rest_framework.response import Response
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from rest_framework.views import status
@@ -108,9 +113,9 @@ class LoginUser(generics.CreateAPIView):
                 },
                 status=status.HTTP_401_UNAUTHORIZED
             )
-        return Response(
-            status=status.HTTP_200_OK
-        )
+        user = User.objects.get(email=email, password=password)
+        data = {'access-token': str(user.token)}
+        return HttpResponse(json.dumps(data, ensure_ascii=False).encode("utf-8"), content_type='application/json')
 
 class ListUserZonesView(generics.ListCreateAPIView):
     """
@@ -121,6 +126,32 @@ class ListUserZonesView(generics.ListCreateAPIView):
     def get_queryset(self):
         queryset = UserZone.objects.all()
         return queryset
+
+
+class ListDeliveryManView(generics.ListCreateAPIView):
+    """
+    Provides a get method handler.
+    """
+    serializer_class = DeliveryManListSerializer
+    
+    def get_queryset(self):
+        queryset = User.objects.filter(role=DELIVERY_MAN)
+        return queryset
+
+class PurchaseStateView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = PurchaseStateSerializer
+    queryset = Purchase.objects.all()
+    def get(self, request, *args, **kwargs):
+        try:
+            purchase = self.queryset.get(id=kwargs["pk"])
+            return Response(PurchaseStateSerializer(purchase).data)
+        except Purchase.DoesNotExist:
+            return Response(
+                data={
+                    "message": "Purchase with id: {} does not exist".format(kwargs["pk"])
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
 
 def isValidEmail(email):
     """

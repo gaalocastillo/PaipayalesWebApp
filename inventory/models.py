@@ -101,10 +101,10 @@ class Purchase(models.Model):
     products = models.CharField(max_length=200, blank=False, null=False, default='{}')
 #    order = JSONField()            This field will be included when start using postgresql
     totalPrice = models.FloatField(null=True, blank=True, default=0.0)
-    state = models.IntegerField(default=REQUESTED, choices=PURCHASE_STATE_CHOICES)
+    status = models.IntegerField(default=REQUESTED, choices=PURCHASE_STATE_CHOICES)
     barCode = models.CharField(max_length=200, blank=True, null=True, default='{}')
     photo = models.ImageField(upload_to=getOrderEvidenceImagePath, blank=True, null=True)
     user = models.ManyToManyField(User)
 
     def __str__(self):
-        return self.id
+        return str(self.id)
