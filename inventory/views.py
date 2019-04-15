@@ -1,5 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import Http404
+from rest_framework_jwt.settings import api_settings
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 
 from .models import Product
 from .models import Category
@@ -14,7 +17,12 @@ from .serializers import UserSerializer
 from .serializers import UserZoneSerializer
 from .serializers import LoginSerializer
 from rest_framework.response import Response
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from rest_framework.views import status
+
+from .utils.tokenization import jwt_payload_handler
+from .utils.tokenization import create_token
+import json
 
 class ListProductsView(generics.ListCreateAPIView):
     """
@@ -33,7 +41,7 @@ class RegisterUsers(generics.CreateAPIView):
     """
     permission_classes = (permissions.AllowAny,)
     serializer_class = UserSerializer
-
+    parser_classes = (MultiPartParser,FormParser,JSONParser)
     def post(self, request, *args, **kwargs):
         name = request.data.get("name", "")
         email = request.data.get("email", "")
@@ -66,13 +74,20 @@ class RegisterUsers(generics.CreateAPIView):
             )
         
         new_user = User.objects.create(
-            name=name, password=password, email=email, address=address, userZone=userZoneObj, profileImage=file
+            name=name, password=password, email=email, address=address, userZone=userZoneObj, profileImage=file,
+            token=None
         )
 #        new_user.update(profileImage=file)
-        return Response(
+        token = create_token(new_user)
+        new_user.token = str(token)
+        new_user.save()
+        data = {"access-token": new_user.token}
+        return HttpResponse(json.dumps(data, ensure_ascii=False).encode("utf-8")\
+        , content_type='application/json')
+        """return Response(
             data=UserSerializer(new_user).data,
             status=status.HTTP_201_CREATED
-        )
+        )"""
 
 class LoginUser(generics.CreateAPIView):
     """

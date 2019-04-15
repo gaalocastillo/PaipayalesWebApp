@@ -6,3 +6,4 @@ django-phonenumber-field
 phonenumbers
 Pillow==6.0.0
 django-cors-headers==2.5.2
+djangorestframework-jwt==1.11.0

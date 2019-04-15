@@ -2,3 +2,5 @@
 /inventory/migrations/
 /inventoryms/__pycache__
 /inventory/__pycache__
+db.sqlite3
+

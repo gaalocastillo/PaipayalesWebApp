@@ -1,9 +1,12 @@
 from django.db import models
+from django.conf import settings
+
 from django.utils import timezone
 import os
 import uuid
 
 from phonenumber_field.modelfields import PhoneNumberField
+from django.contrib.auth.models import BaseUserManager
 
 TYPE_SELLING_CHOICES = (
     ("unit", "Unidad"),
@@ -12,6 +15,7 @@ TYPE_SELLING_CHOICES = (
 
 PRODUCTS_IMAGES_DIR = 'images/products_pics' 
 PROFILE_IMAGES_DIR = 'images/profile_pics' 
+AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.user')
 
 def get_image_path(instance, filename):
     return '/'.join([PROFILE_IMAGES_DIR, str(instance.id), filename])
@@ -26,6 +30,7 @@ class UserZone(models.Model):
         return self.name
 
 class User(models.Model):
+    REQUIRED_FIELDS = ('user',)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4(), editable=False)
     name = models.CharField(max_length=100, blank=False, null=False)
     phoneNumber = PhoneNumberField(null=False, blank=False, unique=True, default="")
@@ -34,6 +39,11 @@ class User(models.Model):
     address = models.CharField(max_length=150, blank=True, null=False)
     profileImage = models.ImageField(upload_to=get_image_path, blank=True, null=True)
     userZone = models.ForeignKey(UserZone, to_field="name", on_delete=models.PROTECT, null=True, blank=True)
+
+    token = models.CharField(max_length=200, default=None, null=True)
+    USERNAME_FIELD = 'email'
+    is_authenticated = False
+    objects = models.Manager()
 
     def __str__(self):
         return 'Id:{0} Name:{1}'.format(self.id, self.name)
