@@ -24,6 +24,7 @@ from .serializers import PurchaseStateSerializer
 from rest_framework.response import Response
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from rest_framework.views import status
+from .decorators import validate_request_data
 
 from .utils.tokenization import jwt_payload_handler
 from .utils.tokenization import create_token
@@ -145,6 +146,20 @@ class PurchaseStateView(generics.RetrieveUpdateDestroyAPIView):
         try:
             purchase = self.queryset.get(id=kwargs["pk"])
             return Response(PurchaseStateSerializer(purchase).data)
+        except Purchase.DoesNotExist:
+            return Response(
+                data={
+                    "message": "Purchase with id: {} does not exist".format(kwargs["pk"])
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+    @validate_request_data
+    def put(self, request, *args, **kwargs):
+        try:
+            purchase = self.queryset.get(id=kwargs["pk"])
+            serializer = PurchaseStateSerializer()
+            updatedPurchase = serializer.update(purchase, request.data)
+            return Response(PurchaseStateSerializer(updatedPurchase).data)
         except Purchase.DoesNotExist:
             return Response(
                 data={
