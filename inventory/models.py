@@ -13,18 +13,28 @@ TYPE_SELLING_CHOICES = (
     ("weight", "Libra")
 )
 
-SOLICITADO = 0
-ARMADO = 1
-POR_ENVIAR = 2
-ENTREGADO = 3
-CANCELADO = -1
+REQUESTED = 0
+PACKED = 1
+TO_BE_SENT = 2
+DELIVERED = 3
+CANCELLED = -1
 
 PURCHASE_STATE_CHOICES = (
-    (SOLICITADO, "Solicitado"),
-    (ARMADO, "Armado"),
-    (POR_ENVIAR, "Por enviar"),
-    (ENTREGADO, "Entregado"),
-    (CANCELADO, "Cancelado"),
+    (REQUESTED, "Solicitado"),
+    (PACKED, "Armado"),
+    (TO_BE_SENT, "Por enviar"),
+    (DELIVERED, "Entregado"),
+    (CANCELLED, "Cancelado"),
+)
+
+ADMIN = 0
+CLIENT = 1
+DELIVERY_MAN = 2
+
+USER_ROLE_CHOICES = (
+    (ADMIN, "Administrador"),
+    (CLIENT, "Cliente"),
+    (DELIVERY_MAN, "Repartidor"),
 )
 
 PRODUCTS_IMAGES_DIR = 'images/products_pics' 
@@ -57,6 +67,7 @@ class User(models.Model):
     address = models.CharField(max_length=150, blank=True, null=False)
     profileImage = models.ImageField(upload_to=get_image_path, blank=True, null=True)
     userZone = models.ForeignKey(UserZone, to_field="name", on_delete=models.PROTECT, null=True, blank=True)
+    role = models.IntegerField(default=CLIENT, choices=USER_ROLE_CHOICES)
 
     token = models.CharField(max_length=200, default=None, null=True)
     USERNAME_FIELD = 'email'
@@ -90,10 +101,10 @@ class Purchase(models.Model):
     products = models.CharField(max_length=200, blank=False, null=False, default='{}')
 #    order = JSONField()            This field will be included when start using postgresql
     totalPrice = models.FloatField(null=True, blank=True, default=0.0)
-    state = models.IntegerField(default=SOLICITADO, choices=PURCHASE_STATE_CHOICES)
+    state = models.IntegerField(default=REQUESTED, choices=PURCHASE_STATE_CHOICES)
     barCode = models.CharField(max_length=200, blank=True, null=True, default='{}')
     photo = models.ImageField(upload_to=getOrderEvidenceImagePath, blank=True, null=True)
-    deliveryMan = models.ForeignKey(User, to_field="id", on_delete=models.CASCADE, null=True)
+    user = models.ManyToManyField(User)
 
     def __str__(self):
         return self.id
