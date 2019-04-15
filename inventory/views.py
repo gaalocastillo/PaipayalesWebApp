@@ -23,6 +23,7 @@ from rest_framework.views import status
 from .utils.tokenization import jwt_payload_handler
 from .utils.tokenization import create_token
 import json
+import uuid
 
 class ListProductsView(generics.ListCreateAPIView):
     """
@@ -73,9 +74,9 @@ class RegisterUsers(generics.CreateAPIView):
                 },
                 status=status.HTTP_404_NOT_FOUND
             )
-        
+        id_ = uuid.uuid4()
         new_user = User.objects.create(
-            name=name, password=password, email=email, address=address, userZone=userZoneObj, 
+            id=id_, name=name, password=password, email=email, address=address, userZone=userZoneObj, 
                 phoneNumber=phoneNumber, profileImage=file, token=None)
         token = create_token(new_user)
         new_user.token = str(token)
