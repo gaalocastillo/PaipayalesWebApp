@@ -205,9 +205,15 @@ class ListPurchasesView(generics.ListCreateAPIView):
     serializer_class = PurchaseSerializer
     
     def get_queryset(self):
-        status = self.kwargs['status'].strip().capitalize()
-        idCenter = self.kwargs['id_center'].strip().capitalize()
-        queryset = Purchase.objects.filter(status=status, deliveryCenter=idCenter)
+        status = self.request.query_params.get('status', None)
+        idCenter = self.request.query_params.get('idCenter', None)
+        queryset = None
+        if status and idCenter:
+            queryset = Purchase.objects.filter(status=status, deliveryCenter=idCenter)
+        #Esto se ejecutara cuando se quiera obtener la lista de pedidos de un repartidor.
+        #Para ello, hay que obtener el token de autenticacion del usuario de la cabecera.
+        #elif status:
+        #    queryset = Purchase.objects.filter(status=status)
         return queryset
 
 def isValidEmail(email):

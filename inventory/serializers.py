@@ -11,7 +11,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ("name", "typeSelling", "price", "photo")
+        fields = ("id", "name", "typeSelling", "price", "photo")
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -46,9 +46,9 @@ class PurchaseInfoSerializer(serializers.ModelSerializer):
 class DeliveryCenterSerializer(serializers.ModelSerializer):
     class Meta:
         model = DeliveryCenter
-        fields = ("id", "name",)
+        fields = ("id", "name", "latitudeGeo", "longitudeGeo")
 
 class PurchaseSerializer(serializers.ModelSerializer):
     class Meta:
-        model = DeliveryCenter
+        model = Purchase
         fields = ("id", "dateCreated", "barCode", "status", "products",)
