@@ -96,6 +96,14 @@ class Product(models.Model):
     def __str__(self):
         return 'Id:{0} Name:{1}'.format(self.id, self.name) 
 
+class DeliveryCenter(models.Model):
+    name = models.CharField(max_length=200)
+    latitudeGeo = models.FloatField(null=True, blank=True, default=0.0)
+    longitudeGeo = models.FloatField(null=True, blank=True, default=0.0)
+
+    def __str__(self):
+        return str(self.id)
+
 class Purchase(models.Model):
     dateCreated = models.DateTimeField(default=timezone.now)
     products = models.CharField(max_length=200, blank=False, null=False, default='{}')
@@ -105,6 +113,7 @@ class Purchase(models.Model):
     barCode = models.CharField(max_length=200, blank=True, null=True, default='{}')
     photo = models.ImageField(upload_to=getOrderEvidenceImagePath, blank=True, null=True)
     user = models.ManyToManyField(User)
+    deliveryCenter = models.ForeignKey(DeliveryCenter, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return str(self.id)

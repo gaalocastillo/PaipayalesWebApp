@@ -3,6 +3,7 @@ from .models import *
 
 admin.site.register(Category)
 admin.site.register(Product)
+admin.site.register(DeliveryCenter)
 admin.site.register(Purchase)
 admin.site.register(User)
 admin.site.register(UserZone)
