@@ -4,6 +4,7 @@ from .models import Category
 from .models import User
 from .models import UserZone
 from .models import Purchase
+from .models import DeliveryCenter
 
 class ProductSerializer(serializers.ModelSerializer):
 # https://stackoverflow.com/questions/32219130/django-rest-framework-imagefield-to-server?rq=1
@@ -41,3 +42,8 @@ class PurchaseInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Purchase
         fields = ("id", "products",)
+
+class DeliveryCenterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DeliveryCenter
+        fields = ("id", "name",)

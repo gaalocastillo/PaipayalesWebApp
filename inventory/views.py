@@ -9,6 +9,7 @@ from .models import Category
 from .models import UserZone
 from .models import User
 from .models import Purchase
+from .models import DeliveryCenter
 from .models import DELIVERY_MAN
 from .forms import ProductForm
 
@@ -21,6 +22,7 @@ from .serializers import LoginSerializer
 from .serializers import DeliveryManListSerializer
 from .serializers import PurchaseStateSerializer
 from .serializers import PurchaseInfoSerializer
+from .serializers import DeliveryCenterSerializer
 
 from rest_framework.response import Response
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
@@ -183,6 +185,16 @@ class PurchaseInfoView(generics.RetrieveUpdateDestroyAPIView):
                 },
                 status=status.HTTP_404_NOT_FOUND
             )
+
+class ListDeliveryCentersView(generics.ListCreateAPIView):
+    """
+    Provides a get method handler.
+    """
+    serializer_class = DeliveryCenterSerializer
+    
+    def get_queryset(self):
+        queryset = DeliveryCenter.objects.all()
+        return queryset
 
 def isValidEmail(email):
     """
