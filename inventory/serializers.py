@@ -47,3 +47,8 @@ class DeliveryCenterSerializer(serializers.ModelSerializer):
     class Meta:
         model = DeliveryCenter
         fields = ("id", "name",)
+
+class PurchaseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DeliveryCenter
+        fields = ("id", "dateCreated", "barCode", "status", "products",)

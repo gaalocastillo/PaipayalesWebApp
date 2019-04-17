@@ -17,4 +17,5 @@ urlpatterns = [
     url(r'^api/v1/purchases/status/(?P<pk>\w+)$', PurchaseStateView.as_view(), name="purchase-state"),
     url(r'^api/v1/purchases/info/(?P<pk>\w+)$', PurchaseInfoView.as_view(), name="purchase-info"),
     url(r'^api/v1/delivery-centers/$', ListDeliveryCentersView.as_view(), name="delivery-centers-all"),
+    url(r'^api/v1/purchases/(?P<status>\w+)/(?P<id_center>\w+)$', ListPurchasesView.as_view(), name="purchases"),
 ]

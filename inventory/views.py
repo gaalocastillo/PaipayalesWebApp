@@ -23,6 +23,7 @@ from .serializers import DeliveryManListSerializer
 from .serializers import PurchaseStateSerializer
 from .serializers import PurchaseInfoSerializer
 from .serializers import DeliveryCenterSerializer
+from .serializers import PurchaseSerializer
 
 from rest_framework.response import Response
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
@@ -194,6 +195,19 @@ class ListDeliveryCentersView(generics.ListCreateAPIView):
     
     def get_queryset(self):
         queryset = DeliveryCenter.objects.all()
+        return queryset
+
+class ListPurchasesView(generics.ListCreateAPIView):
+    """
+    Provides a get method handler for obtaining purchases that match with
+    the status and delivery center given.
+    """
+    serializer_class = PurchaseSerializer
+    
+    def get_queryset(self):
+        status = self.kwargs['status'].strip().capitalize()
+        idCenter = self.kwargs['id_center'].strip().capitalize()
+        queryset = Purchase.objects.filter(status=status, deliveryCenter=idCenter)
         return queryset
 
 def isValidEmail(email):
