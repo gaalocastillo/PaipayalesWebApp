@@ -20,6 +20,7 @@ from .serializers import UserZoneSerializer
 from .serializers import LoginSerializer
 from .serializers import DeliveryManListSerializer
 from .serializers import PurchaseStateSerializer
+from .serializers import PurchaseInfoSerializer
 
 from rest_framework.response import Response
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
@@ -160,6 +161,21 @@ class PurchaseStateView(generics.RetrieveUpdateDestroyAPIView):
             serializer = PurchaseStateSerializer()
             updatedPurchase = serializer.update(purchase, request.data)
             return Response(PurchaseStateSerializer(updatedPurchase).data)
+        except Purchase.DoesNotExist:
+            return Response(
+                data={
+                    "message": "Purchase with id: {} does not exist".format(kwargs["pk"])
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+class PurchaseInfoView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = PurchaseInfoSerializer
+    queryset = Purchase.objects.all()
+    def get(self, request, *args, **kwargs):
+        try:
+            purchase = self.queryset.get(id=kwargs["pk"])
+            return Response(PurchaseInfoSerializer(purchase).data)
         except Purchase.DoesNotExist:
             return Response(
                 data={
