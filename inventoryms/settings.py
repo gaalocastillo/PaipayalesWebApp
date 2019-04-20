@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import json
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -37,17 +38,19 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    'django.contrib.gis',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
     'corsheaders',
+    'rest_framework',
 
     # project app
     'inventory.apps.InventoryConfig',
 
-    'rest_framework',
     'rest_framework.authtoken',
+    'tracks',
 ]
 
 REST_FRAMEWORK = {
@@ -87,6 +90,9 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'inventoryms.urls'
+AUTH_USER_MODEL = 'inventory.User'
+ACCOUNT_USERNAME_REQUIRED = False
+
 
 TEMPLATES = [
     {
@@ -110,13 +116,24 @@ WSGI_APPLICATION = 'inventoryms.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
+settings_dir = os.path.dirname(__file__)
+PARAMS_DIR = os.path.abspath(os.path.dirname(settings_dir))
+DB_PARAMS = os.path.join(PARAMS_DIR,"dbparams.json")
+
+dbParams = None
+with open(DB_PARAMS) as data_file:
+    dbParams = json.load(data_file)
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': dbParams["dbname"],
+        'USER':dbParams["user"],
+        'PASSWORD':dbParams["password"],
+        'HOST': dbParams["host"],
+        'PORT':dbParams["port"]
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -157,3 +174,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+STATIC_ROOT = os.path.join(BASE_DIR,'static')

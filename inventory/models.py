@@ -1,10 +1,9 @@
 from django.db import models
 from django.conf import settings
-
 from django.utils import timezone
 import os
 import uuid
-
+from django.contrib.auth.models import AbstractBaseUser
 from phonenumber_field.modelfields import PhoneNumberField
 from django.contrib.auth.models import BaseUserManager
 
@@ -57,26 +56,90 @@ class UserZone(models.Model):
     def __str__(self):
         return self.name
 
-class User(models.Model):
-    REQUIRED_FIELDS = ('user',)
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4(), editable=False)
+
+class MyUserManager(BaseUserManager):
+    def create_user(self, email, phoneNumber, name=None, password=None):
+        """
+        Creates and saves a User with the given email, date of
+        birth and password.
+        INSERT INTO inventory_user (email, password, "phoneNumber",name,address,role,is_staff) VALUES ('queti@queti.com', 'quetiqueti', '2346497','queti','queti',1, False);
+        """
+        if not email:
+            raise ValueError('Users must have an email address')
+        if not phoneNumber:
+            raise ValueError('Users must have a phone number')
+
+        user = self.model(
+            email=MyUserManager.normalize_email(email),
+            name= name or '',
+            phoneNumber=phoneNumber
+        )
+
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, phoneNumber, password):
+        """
+        Creates and saves a superuser with the given email, date of
+        birth and password.
+        """
+
+        if not email:
+            raise ValueError('Users must have an email address')
+        if not phoneNumber:
+            raise ValueError('Users must have a phone number')
+
+        user = self.create_user(email,
+            password=password,
+            phoneNumber=phoneNumber
+        )
+        user.is_admin = True
+        user.save(using=self._db)
+        return user
+
+class User(AbstractBaseUser):
+    #id = models.UUIDField(primary_key=True, default=uuid.uuid4(), editable=False)
     name = models.CharField(max_length=100, blank=False, null=False)
     phoneNumber = PhoneNumberField(null=False, blank=False, unique=True, default="")
-    email = models.EmailField(max_length=70,blank=True, unique=True)
-    password = models.CharField(max_length=15)
-    address = models.CharField(max_length=150, blank=True, null=False)
+    email = models.EmailField(max_length=70, unique=True, default="")
+    #password = models.CharField(max_length=15)
+    address = models.CharField(max_length=150, blank=True, null=False, default="")
     profileImage = models.ImageField(upload_to=get_image_path, blank=True, null=True)
     userZone = models.ForeignKey(UserZone, to_field="name", on_delete=models.PROTECT, null=True, blank=True)
     role = models.IntegerField(default=CLIENT, choices=USER_ROLE_CHOICES)
+    is_staff = models.BooleanField('staff status',default=False)
+    is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
+
 
     token = models.CharField(max_length=200, default=None, null=True)
     USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['phoneNumber']
     is_authenticated = False
-    objects = models.Manager()
+    objects = MyUserManager()
+    #is_anonymous = False
 
     def __str__(self):
         return 'Id:{0} Name:{1}'.format(self.id, self.name)
 
+    def has_perm(self, perm, obj=None):
+        "Does the user have a specific permission?"
+        # Simplest possible answer: Yes, always
+        return True
+
+    def has_module_perms(self, app_label):
+        "Does the user have permissions to view the app `app_label`?"
+        # Simplest possible answer: Yes, always
+        return True
+
+    @property
+    def is_staff(self):
+        "Is the user a member of staff?"
+        # Simplest possible answer: All admins are staff
+        return self.is_admin
+
+    
 class Category(models.Model):
     name = models.CharField(max_length=100, blank=False, null=False, unique=True)
 
