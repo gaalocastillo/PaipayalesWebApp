@@ -31,7 +31,7 @@ class Route(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):
-    	return 'Route '+convert_date(self.timestamp) + ' of user '+self.user.username
+    	return 'Route '+convert_date(self.timestamp) + ' of user '+self.user.name
     
     class Meta:
     	ordering = ["timestamp"]

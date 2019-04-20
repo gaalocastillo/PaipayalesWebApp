@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import json
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ''
+SECRET_KEY = '@0v4ijsud7wm(&0m+!5tb4key7_$k*m8hy2j2jm2h5yzbld4d#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -90,6 +91,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'inventoryms.urls'
 AUTH_USER_MODEL = 'inventory.User'
+ACCOUNT_USERNAME_REQUIRED = False
 
 
 TEMPLATES = [
@@ -114,13 +116,24 @@ WSGI_APPLICATION = 'inventoryms.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
+settings_dir = os.path.dirname(__file__)
+PARAMS_DIR = os.path.abspath(os.path.dirname(settings_dir))
+DB_PARAMS = os.path.join(PARAMS_DIR,"dbparams.json")
+
+dbParams = None
+with open(DB_PARAMS) as data_file:
+    dbParams = json.load(data_file)
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': dbParams["dbname"],
+        'USER':dbParams["user"],
+        'PASSWORD':dbParams["password"],
+        'HOST': dbParams["host"],
+        'PORT':dbParams["port"]
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators

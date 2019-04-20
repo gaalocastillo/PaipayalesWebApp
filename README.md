@@ -12,13 +12,23 @@
 	```
 	pip install -r requirements.txt
 	```
+3. Create database
+	```
+	sudo -u postgres psql
+	CREATE DATABASE paipay_db;
+	CREATE USER paipay WITH PASSWORD '0000';
+	GRANT ALL PRIVILEGES ON DATABASE paipay_db TO paipay; 
+	\c paipay_db; 
+	CREATE EXTENSION postgis; CREATE EXTENSION postgis_topology;
+	\q
+	```
 
-3. Go To Project root `inventoryms/` and  Make migrations and migrate
+4. Go To Project root `inventoryms/` and  Make migrations and migrate
 	```
 	./manage.py makemigrations && ./manage.py migrate
 	```
 
-4. Run the server
+5. Run the server
 	```
 	./manage.py runserver 0:9090
 	```
