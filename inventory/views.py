@@ -84,7 +84,7 @@ class RegisterUsers(generics.CreateAPIView):
                 },
                 status=status.HTTP_404_NOT_FOUND
             )
-        id_ = uuid.uuid4()
+        id_ = uuid.uuid4
         new_user = User.objects.create(
             id=id_, name=name, password=password, email=email, address=address, userZone=userZoneObj, 
                 phoneNumber=phoneNumber, profileImage=file, token=None)
