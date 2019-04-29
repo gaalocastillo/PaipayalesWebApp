@@ -26,6 +26,7 @@ from .serializers import PurchaseStateSerializer
 from .serializers import PurchaseInfoSerializer
 from .serializers import DeliveryCenterSerializer
 from .serializers import PurchaseSerializer
+from .serializers import MakePurchaseSerializer
 
 from rest_framework.response import Response
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
@@ -95,8 +96,12 @@ class RegisterUsers(generics.CreateAPIView):
                 },
                 status=status.HTTP_404_NOT_FOUND
             )
-        new_user = User.objects.create(name=name, password=password, email=email, address=address, userZone=userZoneObj, 
-                phoneNumber=phoneNumber, profileImage=file, role=int(role), token=None)
+        new_user = User.objects.create_user(email=email, password=password, phoneNumber=phoneNumber,
+                    name=name)
+        new_user.address = address
+        new_user.userZone = userZoneObj
+        new_user.profileImage = file
+        new_user.role = int(role)
         token = create_token(new_user)
         new_user.token = str(token)
         new_user.save()
@@ -225,6 +230,39 @@ class ListPurchasesView(generics.ListCreateAPIView):
         #elif status:
         #    queryset = Purchase.objects.filter(status=status)
         return queryset
+
+class MakePurchaseView(generics.CreateAPIView):
+    serializer_class = MakePurchaseSerializer
+
+    def post(self, request, *args, **kwargs):
+        products = request.data.get("products", "")
+        totalPrice = request.data.get("totalPrice", "")
+        if not products:
+            return Response(
+                data={
+                    "message": "Empty purchase. Please add at least one product."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        meta = request.META
+        if('HTTP_AUTHORIZATION' not in meta or not User.objects.filter(token=meta['HTTP_AUTHORIZATION']).exists() or  
+            int(User.objects.get(token=meta['HTTP_AUTHORIZATION']).role) != CLIENT):
+            return Response(
+                data={
+                    "message": "Authorization denied. No valid authorization header found."
+                },
+                status=status.HTTP_403_FORBIDDEN
+            )
+        else:
+            user = User.objects.get(token=meta['HTTP_AUTHORIZATION'])
+            purchase = Purchase.objects.create(products=products, totalPrice=totalPrice)
+            purchase.user.add(user)
+        return Response(
+                data={
+                    "message": "Purchase made."
+                },
+                status=status.HTTP_201_CREATED
+            )
 
 def isValidEmail(email):
     """

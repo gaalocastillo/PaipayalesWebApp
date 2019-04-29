@@ -6,6 +6,7 @@ import uuid
 from django.contrib.auth.models import AbstractBaseUser
 from phonenumber_field.modelfields import PhoneNumberField
 from django.contrib.auth.models import BaseUserManager
+from .utils.fields import JSONField
 
 TYPE_SELLING_CHOICES = (
     ("unit", "Unidad"),
@@ -168,8 +169,7 @@ class DeliveryCenter(models.Model):
 
 class Purchase(models.Model):
     dateCreated = models.DateTimeField(default=timezone.now)
-    products = models.CharField(max_length=200, blank=False, null=False, default='{}')
-#    order = JSONField()            This field will be included when start using postgresql
+    products = JSONField(blank=False, null=False, default=dict)
     totalPrice = models.FloatField(null=True, blank=True, default=0.0)
     status = models.IntegerField(default=REQUESTED, choices=PURCHASE_STATE_CHOICES)
     barCode = models.CharField(max_length=200, blank=True, null=True, default='{}')
