@@ -11,6 +11,8 @@ from .models import User
 from .models import Purchase
 from .models import DeliveryCenter
 from .models import DELIVERY_MAN
+from .models import CLIENT
+from .models import ADMIN
 from .forms import ProductForm
 
 from rest_framework import generics
@@ -30,6 +32,7 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from rest_framework.views import status
 from .decorators import validate_request_data
 
+from django.contrib.auth import authenticate
 from .utils.tokenization import jwt_payload_handler
 from .utils.tokenization import create_token
 import json
@@ -60,11 +63,12 @@ class RegisterUsers(generics.CreateAPIView):
         phoneNumber = request.data.get("phoneNumber", "")
         address = request.data.get("address", "")
         userZone = request.data.get("userZone", "")
+        role = request.data.get("role", "")
         file = request.data['file']
-        if not name or not password or not email or not address or not userZone or not phoneNumber:
+        if not name or not password or not email or not address or not userZone or not phoneNumber or not role:
             return Response(
                 data={
-                    "message": "name, address, userZone, email, phoneNumber and password is required to register a user"
+                    "message": "name, address, userZone, email, phoneNumber, role and password is required to register a user"
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
@@ -84,14 +88,19 @@ class RegisterUsers(generics.CreateAPIView):
                 },
                 status=status.HTTP_404_NOT_FOUND
             )
-        id_ = uuid.uuid4()
-        new_user = User.objects.create(
-            id=id_, name=name, password=password, email=email, address=address, userZone=userZoneObj, 
-                phoneNumber=phoneNumber, profileImage=file, token=None)
+        if int(role) not in {ADMIN, CLIENT, DELIVERY_MAN}:
+            return Response(
+                data={
+                    "message": "The sent role does not exist"
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+        new_user = User.objects.create(name=name, password=password, email=email, address=address, userZone=userZoneObj, 
+                phoneNumber=phoneNumber, profileImage=file, role=int(role), token=None)
         token = create_token(new_user)
         new_user.token = str(token)
         new_user.save()
-        data = {"access-token": new_user.token}
+        data = {"access-token": new_user.token, 'role': new_user.role}
         return HttpResponse(json.dumps(data, ensure_ascii=False).encode("utf-8"), content_type='application/json')
 
 class LoginUser(generics.CreateAPIView):
@@ -111,16 +120,17 @@ class LoginUser(generics.CreateAPIView):
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
-        if not isValidLogin(email=email, password=password):
+        user = authenticate(username=email, password=password)
+        if user is not None:
+            data = {'access-token': str(user.token), 'role': str(user.role)}
+            return HttpResponse(json.dumps(data, ensure_ascii=False).encode("utf-8"), content_type='application/json')
+        else:
             return Response(
                 data={
                     "message": "Invalid credentials."
                 },
                 status=status.HTTP_401_UNAUTHORIZED
             )
-        user = User.objects.get(email=email, password=password)
-        data = {'access-token': str(user.token)}
-        return HttpResponse(json.dumps(data, ensure_ascii=False).encode("utf-8"), content_type='application/json')
 
 class ListUserZonesView(generics.ListCreateAPIView):
     """

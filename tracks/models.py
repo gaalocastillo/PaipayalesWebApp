@@ -2,6 +2,7 @@ from django.contrib.gis.db import models
 from datetime import datetime
 from django.conf import settings
 from .utils import *
+from inventory.models import Purchase
 
 class LastLocation(models.Model):
     location = models.PointField()
@@ -11,7 +12,7 @@ class LastLocation(models.Model):
 
 class Step(models.Model):
     location = models.PointField() #default srid is 4326
-    speed = models.DecimalField(default=0.000, max_digits=10, decimal_places=3)
+    #speed = models.DecimalField(default=0.000, max_digits=10, decimal_places=3)
     timestamp = models.DateTimeField(default=datetime.now)
     route = models.ForeignKey('Route', related_name='steps',on_delete=models.CASCADE)
 
@@ -23,16 +24,18 @@ class Step(models.Model):
     	verbose_name = "Points of routes/Step"
 
 class Route(models.Model):
-    timestamp = models.DateTimeField(default=datetime.now)
+    init_time = models.DateTimeField(default=datetime.now)
+    end_time = models.DateTimeField(default=datetime.now)
     distance = models.DecimalField(default=0.000, max_digits=20, decimal_places=3)
-    duration = models.DurationField(null=True)
-    init_coord = models.PointField(null=True)
-    end_coord = models.PointField(null=True)
+    #duration = models.DurationField(null=True, blank=True)
+    origin = models.PointField(null=True)
+    destination = models.PointField(null=True)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    purchase = models.OneToOneField(Purchase, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-    	return 'Route '+convert_date(self.timestamp) + ' of user '+self.user.name
+    	return 'Route '+convert_date(self.init_time) + ' of user '+self.user.id
     
     class Meta:
-    	ordering = ["timestamp"]
+    	ordering = ["init_time"]
     	verbose_name = "Route"

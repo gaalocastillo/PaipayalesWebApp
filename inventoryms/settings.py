@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'rest_framework',
 
     # project app
-    'inventory.apps.InventoryConfig',
+    'inventory',
 
     'rest_framework.authtoken',
     'tracks',

@@ -4,7 +4,7 @@ from rest_framework import serializers
 from drf_extra_fields.geo_fields import PointField
 
 class LastLocationSerializer(serializers.ModelSerializer):
-	user = serializers.SlugRelatedField(many=False,queryset=User.objects.all(),slug_field='username', required=False)
+	user = serializers.SlugRelatedField(many=False,queryset=User.objects.all(),slug_field='id', required=False)
 	location = PointField()
 
 	class Meta:
@@ -21,9 +21,9 @@ class StepSerializer(serializers.ModelSerializer):
 		fields = ('location', 'timestamp', 'route')
 
 class RouteSerializer(serializers.ModelSerializer):
-	user = serializers.SlugRelatedField(many=False,queryset=User.objects.all(),slug_field='username')
+	user = serializers.SlugRelatedField(many=False,queryset=User.objects.all(),slug_field='id')
 	steps = StepSerializer(many=True)
 
 	class Meta:
 		model = Route
-		fields = ('distance', 'timestamp', 'user', 'steps')
+		fields = ('distance', 'init_time', 'user', 'steps')

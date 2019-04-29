@@ -30,7 +30,7 @@ class RouteViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
-    queryset = Route.objects.all().order_by('timestamp')
+    queryset = Route.objects.all().order_by('init_time')
     serializer_class = RouteSerializer
 
 

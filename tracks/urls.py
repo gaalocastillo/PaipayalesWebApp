@@ -24,7 +24,7 @@ from tracks import views
 from rest_framework.schemas import get_schema_view
 from django.urls import path
 
-schema_view = get_schema_view(title='Pastebin API')
+#schema_view = get_schema_view(title='Pastebin API')
 
 router = routers.DefaultRouter()
 router.register(r'lastlocations', views.LastLocationViewSet)
@@ -36,9 +36,9 @@ urlpatterns = [
     url(r'^$', views.home, name='home'),
     url(r'^rutas/', views.rutas, name='rutas'),
 
-    url(r'^api/', include(router.urls), name='api'),
+    url(r'^api/v1/', include(router.urls), name='api'),
     url(r'^api-auth/', include('rest_framework.urls')),
-    url(r'^schema/', schema_view),
-    #url(r'^api/lastlocations/(?P<pk>\d+)/', views.last_locations_detail),
+    #url(r'^schema/', schema_view),
+    #url(r'^api/v1/lastlocations/(?P<pk>\d+)/', views.last_locations_detail),
 
 ]

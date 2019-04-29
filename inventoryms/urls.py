@@ -20,7 +20,7 @@ from django.contrib.gis import admin
 
 urlpatterns = [
     url(r'^', include('inventory.urls')),
-    url(r'^', include('tracks.urls')),
+    url(r'^tracks/', include('tracks.urls')),
 
     url(r'^admin/', admin.site.urls),
 ]
