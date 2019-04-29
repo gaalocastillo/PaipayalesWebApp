@@ -306,6 +306,11 @@ class ProcessPurchaseView(generics.CreateAPIView):
             )
         user = User.objects.get(id=int(userId))
         purchase = Purchase.objects.get(id=id_)
+        users = purchase.user.all().values()
+        for u in users:
+            if u['role'] == DELIVERY_MAN:
+                userObj = User.objects.get(id=u['id'])
+                purchase.user.remove(userObj)
         purchase.user.add(user)
         purchase.barCode = barCode
         #purchase.photo = photo
