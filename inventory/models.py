@@ -42,7 +42,7 @@ ORDER_EVIDENCES_DIR = 'images/orders_evidence_pics'
 AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.user')
 
 def get_image_path(instance, filename):
-    return '/'.join([PROFILE_IMAGES_DIR, str(instance.id), filename])
+    return '/'.join([PROFILE_IMAGES_DIR, str(instance.email), filename])
 
 def getProdImagePath(instance, filename):
     return '/'.join([PRODUCTS_IMAGES_DIR, str(instance.id), filename])
@@ -112,8 +112,7 @@ class User(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
-
-    token = models.CharField(max_length=200, default=None, null=True)
+    token = models.CharField(max_length=500, default=None, null=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['phoneNumber']
     is_authenticated = False
