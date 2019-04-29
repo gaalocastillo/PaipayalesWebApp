@@ -66,3 +66,8 @@ class MakePurchaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Purchase
         fields = ("products")
+
+class ProcessPurchaseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Purchase
+        fields = ("id", "user", "status", "barCode", "photo",)

@@ -19,4 +19,5 @@ urlpatterns = [
     url(r'^api/v1/delivery-centers/$', ListDeliveryCentersView.as_view(), name="delivery-centers-all"),
     url(r'^api/v1/purchases/query?.+$', ListPurchasesView.as_view(), name="purchases"),
     url('api/v1/purchases/make-purchase/', MakePurchaseView.as_view(), name="make-purchase"),
+    url('api/v1/purchases/process-purchase/', ProcessPurchaseView.as_view(), name="process-purchase"),
 ]

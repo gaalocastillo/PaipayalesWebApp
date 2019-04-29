@@ -14,6 +14,7 @@ from .models import DELIVERY_MAN
 from .models import CLIENT
 from .models import ADMIN
 from .forms import ProductForm
+from .models import PURCHASE_STATE_CHOICES
 
 from rest_framework import generics
 from rest_framework import permissions
@@ -27,6 +28,7 @@ from .serializers import PurchaseInfoSerializer
 from .serializers import DeliveryCenterSerializer
 from .serializers import PurchaseSerializer
 from .serializers import MakePurchaseSerializer
+from .serializers import ProcessPurchaseSerializer
 
 from rest_framework.response import Response
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
@@ -233,7 +235,7 @@ class ListPurchasesView(generics.ListCreateAPIView):
 
 class MakePurchaseView(generics.CreateAPIView):
     serializer_class = MakePurchaseSerializer
-
+    permission_classes = (permissions.AllowAny,)
     def post(self, request, *args, **kwargs):
         products = request.data.get("products", "")
         totalPrice = request.data.get("totalPrice", "")
@@ -263,6 +265,64 @@ class MakePurchaseView(generics.CreateAPIView):
                 },
                 status=status.HTTP_201_CREATED
             )
+
+class ProcessPurchaseView(generics.CreateAPIView):
+    serializer_class = ProcessPurchaseSerializer
+    parser_classes = (MultiPartParser,FormParser,JSONParser)
+    def post(self, request, *args, **kwargs):
+        id_ = request.data.get("id", "")
+        userId = request.data.get("user", "")
+        status_ = request.data.get("status", "")
+        barCode = request.data.get("barCode", "")
+        #photo = request.data['file']
+        
+        if not id_ or not userId or not status_ or not barCode:
+            return Response(
+                data={
+                    "message": "Purchase id, delivery-man id, new status and barCode are needed to process the request."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        if not Purchase.objects.filter(id=id_).exists():
+            return Response(
+                data={
+                    "message": "Purchase not found."
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+        if not User.objects.filter(id=userId).exists() or User.objects.get(id=userId).role != DELIVERY_MAN:
+            return Response(
+                data={
+                    "message": "Delivery man not found."
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+        if not isValidStatus(int(status_)):
+            return Response(
+                data={
+                    "message": "Status not found."
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+        user = User.objects.get(id=int(userId))
+        purchase = Purchase.objects.get(id=id_)
+        purchase.user.add(user)
+        purchase.barCode = barCode
+        #purchase.photo = photo
+        purchase.status = int(status_)
+        purchase.save()
+        return Response(
+                data={
+                    "message": "Purchase updated."
+                },
+                status = status.HTTP_200_OK
+            )
+
+def isValidStatus(status):
+    for e in PURCHASE_STATE_CHOICES:
+        if int(e[0]) == int(status):
+            return True
+    return False
 
 def isValidEmail(email):
     """
