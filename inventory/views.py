@@ -100,7 +100,7 @@ class RegisterUsers(generics.CreateAPIView):
         token = create_token(new_user)
         new_user.token = str(token)
         new_user.save()
-        data = {"access-token": new_user.token, 'role': new_user.role}
+        data = {"access-token": new_user.token, 'role': int(new_user.role)}
         return HttpResponse(json.dumps(data, ensure_ascii=False).encode("utf-8"), content_type='application/json')
 
 class LoginUser(generics.CreateAPIView):
@@ -122,7 +122,7 @@ class LoginUser(generics.CreateAPIView):
             )
         user = authenticate(username=email, password=password)
         if user is not None:
-            data = {'access-token': str(user.token), 'role': str(user.role)}
+            data = {'access-token': str(user.token), 'role': int(user.role)}
             return HttpResponse(json.dumps(data, ensure_ascii=False).encode("utf-8"), content_type='application/json')
         else:
             return Response(
