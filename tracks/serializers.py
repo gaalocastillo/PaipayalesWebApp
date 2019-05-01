@@ -14,16 +14,19 @@ class LastLocationSerializer(serializers.ModelSerializer):
 
 
 class StepSerializer(serializers.ModelSerializer):
+	route = serializers.SlugRelatedField(many=False,queryset=Route.objects.all(),slug_field='id', required=False)
 	location = PointField()
-
 	class Meta:
 		model = Step
-		fields = ('location', 'timestamp', 'route')
+		fields = ('id', 'location','timestamp','route' )
 
 class RouteSerializer(serializers.ModelSerializer):
 	user = serializers.SlugRelatedField(many=False,queryset=User.objects.all(),slug_field='id')
 	steps = StepSerializer(many=True)
+	origin = PointField()
+	destination = PointField()
 
 	class Meta:
 		model = Route
-		fields = ('distance', 'init_time', 'user', 'steps')
+		#fields = ('id','distance', 'init_time', 'user', 'steps')
+		fields = "__all__"
