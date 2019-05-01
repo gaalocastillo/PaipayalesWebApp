@@ -22,7 +22,7 @@ class StepSerializer(serializers.ModelSerializer):
 
 class RouteSerializer(serializers.ModelSerializer):
 	user = serializers.SlugRelatedField(many=False,queryset=User.objects.all(),slug_field='id')
-	steps = StepSerializer(many=True)
+	steps = StepSerializer(many=True,read_only=True)
 	origin = PointField()
 	destination = PointField()
 
