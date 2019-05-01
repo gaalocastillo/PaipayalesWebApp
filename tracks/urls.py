@@ -33,11 +33,11 @@ router.register(r'lastlocations', views.LastLocationViewSet)
 
 
 urlpatterns = [
-    url(r'^$', views.home, name='home'),
+    url(r'^$', views.home, name='last_locations'),
     url(r'^rutas/', views.rutas, name='rutas'),
     url(r'^api/v1/steps/(?P<pk>\d+)$', views.StepDetail.as_view()),
     url(r'^api/v1/steps', views.StepsList.as_view()),
-    url(r'^api/v1/purchasesxworker/(?P<pk>\d+)$', views.pedidos_por_repartidor),
+    url(r'^api/v1/purchasesxworker$', views.pedidos_por_repartidor),
     url(r'^api/v1/routes/(?P<pk>\d+)$', views.RouteDetail.as_view()),
     url(r'^api/v1/routes', views.RoutesList.as_view()),
 
