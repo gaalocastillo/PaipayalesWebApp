@@ -28,13 +28,18 @@ from django.urls import path
 
 router = routers.DefaultRouter()
 router.register(r'lastlocations', views.LastLocationViewSet)
-router.register(r'steps', views.StepViewSet)
-router.register(r'routes', views.RouteViewSet)
+#router.register(r'steps', views.StepsList.as_view())
+#router.register(r'routes', views.RouteViewSet)
 
 
 urlpatterns = [
     url(r'^$', views.home, name='home'),
     url(r'^rutas/', views.rutas, name='rutas'),
+    url(r'^api/v1/steps/(?P<pk>\d+)$', views.StepDetail.as_view()),
+    url(r'^api/v1/steps$', views.StepsList.as_view()),
+    url(r'^api/v1/purchasesxworker/(?P<pk>\d+)$', views.pedidos_por_repartidor),
+    url(r'^api/v1/routes/(?P<pk>\d+)$', views.RouteDetail.as_view()),
+    url(r'^api/v1/routes$', views.RoutesList.as_view()),
 
     url(r'^api/v1/', include(router.urls), name='api'),
     url(r'^api-auth/', include('rest_framework.urls')),
