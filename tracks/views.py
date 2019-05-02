@@ -11,6 +11,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.gis.geos import Point
 
+ADMIN = 0
+CLIENT = 1
+DELIVERY_MAN = 2
+
 '''
 class StepViewSet(viewsets.ModelViewSet):
     """
@@ -51,14 +55,23 @@ def pedidos_por_repartidor(request,token):
     Respuesta: lista de pedidos, dentro de un diccionario
     '''
     if request.method == 'GET':
+        meta = request.META
+        if('HTTP_AUTHORIZATION' not in meta or not User.objects.filter(token=meta['HTTP_AUTHORIZATION']).exists() or  
+            int(User.objects.get(token=meta['HTTP_AUTHORIZATION']).role) != DELIVERY_MAN):
+            return Response(
+                data={
+                    "message": "Authorization denied. No valid authorization header found."
+                },
+                status=status.HTTP_403_FORBIDDEN
+            )
         #obtener usuario de acuerdo al token
-        #user = obtener_usuario(token)
-        user = User.objects.get(pk=token)
-        if (user != None):
-            purchases = user.purchase_set.all().values('id', 'dateCreated')
-            response = {}
-            response["purchases"] = purchases
-            return JsonResponse(response)
+        user = User.objects.get(token=meta['HTTP_AUTHORIZATION'])
+        #user = User.objects.get(pk=token)
+
+        purchases = user.purchase_set.all().values('id', 'dateCreated')
+        response = {}
+        response["purchases"] = purchases
+        return JsonResponse(response)
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST)
         
@@ -166,5 +179,3 @@ class RouteDetail(APIView):
         route.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-
-#def obtener_usuario(token):
