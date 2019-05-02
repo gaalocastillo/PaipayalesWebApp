@@ -48,9 +48,15 @@ class PurchaseStateSerializer(serializers.ModelSerializer):
         fields = ("id", "status",)
 
 class PurchaseInfoSerializer(serializers.ModelSerializer):
+    """Serializador que muestra los datos asociados a una compra. Usado
+    en end-point consultado por el repartidor, para obtener los datos de un
+    pedido."""
+    #user = serializers.SlugRelatedField(many=True,queryset=User.objects.all(),slug_field='name')
+    #user_tel = serializers.SlugRelatedField(many=False,queryset=User.objects.all(),slug_field='phoneNumber')
+    user = UserSerializer(required=False, many=True)
     class Meta:
         model = Purchase
-        fields = ("id", "products",)
+        fields = ("id", "products",'barCode','totalPrice','user')
 
 class DeliveryCenterSerializer(serializers.ModelSerializer):
     class Meta:
