@@ -10,6 +10,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.gis.geos import Point
+from rest_framework.decorators import api_view
 
 ADMIN = 0
 CLIENT = 1
@@ -48,14 +49,17 @@ def rutas(request):
 	if request.method == 'GET':
 		return render(request,"rutas.html");
 
-def pedidos_por_repartidor(request,token):
+@api_view(['GET' ])
+def pedidos_por_repartidor(request):
     '''
     End-point que enlista todos los pedidos relacionados a un repartidor.
     Params: token del repartidor
-    Respuesta: lista de pedidos, dentro de un diccionario
+    Respuesta: lista de pedidos, dentro de un diccionario con clave data
+    {"data":[]}
     '''
     if request.method == 'GET':
         meta = request.META
+        print(meta['HTTP_AUTHORIZATION'])
         if('HTTP_AUTHORIZATION' not in meta or not User.objects.filter(token=meta['HTTP_AUTHORIZATION']).exists() or  
             int(User.objects.get(token=meta['HTTP_AUTHORIZATION']).role) != DELIVERY_MAN):
             return Response(
@@ -68,12 +72,15 @@ def pedidos_por_repartidor(request,token):
         user = User.objects.get(token=meta['HTTP_AUTHORIZATION'])
         #user = User.objects.get(pk=token)
 
-        purchases = user.purchase_set.all().values('id', 'dateCreated')
+        purchases = user.purchases.all().values('id', 'dateCreated')
+        purchases = list(purchases)
         response = {}
-        response["purchases"] = purchases
+        response["data"] = purchases
         return JsonResponse(response)
     else:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(data={
+                    "message": "Bad request."
+                },status=status.HTTP_400_BAD_REQUEST)
         
 
 class StepsList(APIView):

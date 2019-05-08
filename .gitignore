@@ -3,6 +3,7 @@
 /inventory/__pycache__
 /migrations/
 tracks/migrations/
+inventory/migrations
 *.pyc
 # Django #
 *.log

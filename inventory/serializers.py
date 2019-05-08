@@ -26,6 +26,16 @@ class UserSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+class UserBriefSerializer(serializers.ModelSerializer):
+    """
+        Serializador para mostrar la informacion de un cliente a un repartidor.
+        Usado en PurchaseInfoSerializer.
+    """
+    class Meta:
+        model = User
+        fields = ("name", "phoneNumber","address", "userZone")
+
+
 
 class LoginSerializer(serializers.ModelSerializer):
     class Meta:
@@ -53,7 +63,7 @@ class PurchaseInfoSerializer(serializers.ModelSerializer):
     pedido."""
     #user = serializers.SlugRelatedField(many=True,queryset=User.objects.all(),slug_field='name')
     #user_tel = serializers.SlugRelatedField(many=False,queryset=User.objects.all(),slug_field='phoneNumber')
-    user = UserSerializer(required=False, many=True)
+    user = UserBriefSerializer(required=False)
     class Meta:
         model = Purchase
         fields = ("id", "products",'barCode','totalPrice','user')
