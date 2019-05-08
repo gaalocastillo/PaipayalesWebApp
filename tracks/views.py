@@ -62,7 +62,8 @@ def pedidos_por_repartidor(request):
     if request.method == 'GET':
         meta = request.META
         print(meta['HTTP_AUTHORIZATION'])
-        if('HTTP_AUTHORIZATION' not in meta or not User.objects.filter(token=meta['HTTP_AUTHORIZATION']).exists() or int(User.objects.get(token=meta['HTTP_AUTHORIZATION']).role) != DELIVERY_MAN):
+        if('HTTP_AUTHORIZATION' not in meta or not User.objects.filter(token=meta['HTTP_AUTHORIZATION']).exists() or  
+            int(User.objects.get(token=meta['HTTP_AUTHORIZATION']).role) != DELIVERY_MAN):
             return Response(
                 data={
                     "message": "Authorization denied. No valid authorization header found."
