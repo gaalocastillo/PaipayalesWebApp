@@ -328,6 +328,32 @@ class ProcessPurchaseView(generics.CreateAPIView):
                 status = status.HTTP_200_OK
             )
 
+class ListUserPurchasesView(generics.ListCreateAPIView):
+    """
+    Provides a get method handler for obtaining purchases that match with
+    the status and delivery center given.
+    """
+    serializer_class = PurchaseSerializer
+    permission_classes = (permissions.AllowAny,)
+
+    def get_queryset(self):
+        status = self.request.query_params.get('status', None)
+        queryset = None
+        meta = self.request.META
+        if('HTTP_AUTHORIZATION' not in meta or not User.objects.filter(token=meta['HTTP_AUTHORIZATION']).exists() or  
+            int(User.objects.get(token=meta['HTTP_AUTHORIZATION']).role) != CLIENT):
+            return Response(
+                data={
+                    "message": "Authorization denied. No valid authorization header found."
+                },
+                status=status.HTTP_403_FORBIDDEN
+            )
+        else:
+            if status:
+                user = User.objects.get(token=meta['HTTP_AUTHORIZATION'])
+                queryset = Purchase.objects.filter(status=status, user=user)
+        return queryset
+
 def isValidStatus(status):
     for e in PURCHASE_STATE_CHOICES:
         if int(e[0]) == int(status):
