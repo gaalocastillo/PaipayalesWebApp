@@ -9,8 +9,8 @@ from django.contrib.auth.models import BaseUserManager
 from .utils.fields import JSONField
 
 TYPE_SELLING_CHOICES = (
-    ("unit", "Unidad"),
-    ("weight", "Libra")
+    ("Unidad", "Unidad"),
+    ("Libra", "Libra")
 )
 
 REQUESTED = 0
