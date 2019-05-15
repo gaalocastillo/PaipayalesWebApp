@@ -9,13 +9,9 @@ from django.contrib.auth.models import BaseUserManager
 from .utils.fields import JSONField
 
 TYPE_SELLING_CHOICES = (
-<<<<<<< 83c33a58fea84b34eae35ab99928db6cb0081ab7
     ("Unidad", "Unidad"),
     ("Libra", "Libra")
-=======
-    ("unit", "Unidad"),
-    ("weight", "Libra"),
->>>>>>> bug fixed, modification on urls.py and setting.py
+
 )
 
 REQUESTED = 0
