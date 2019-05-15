@@ -14,4 +14,5 @@ simplejson==3.16.0
 django-extra-fields
 #channels
 #asgi_redis
-coreapi pyyaml
+coreapi 
+pyyaml

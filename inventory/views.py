@@ -41,15 +41,20 @@ from .utils.tokenization import create_token
 import json
 import uuid
 
+
+
 class ListProductsView(generics.ListCreateAPIView):
     """
     Provides a get method handler.
     """
     serializer_class = ProductSerializer
     
+    
+    
     def get_queryset(self):
         cat = self.kwargs['cat'].strip().capitalize()
         queryset = Product.objects.filter(category=cat)
+        
         return queryset
 
 class RegisterUsers(generics.CreateAPIView):

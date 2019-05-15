@@ -9,8 +9,13 @@ from django.contrib.auth.models import BaseUserManager
 from .utils.fields import JSONField
 
 TYPE_SELLING_CHOICES = (
+<<<<<<< 83c33a58fea84b34eae35ab99928db6cb0081ab7
     ("Unidad", "Unidad"),
     ("Libra", "Libra")
+=======
+    ("unit", "Unidad"),
+    ("weight", "Libra"),
+>>>>>>> bug fixed, modification on urls.py and setting.py
 )
 
 REQUESTED = 0
@@ -157,7 +162,7 @@ class Product(models.Model):
     isAvailable = models.BooleanField(default=True)
 
     def __str__(self):
-        return 'Id:{0} Name:{1}'.format(self.id, self.name) 
+        return 'Id:{0} Name:{1} '.format(self.id, self.name)
 
 class DeliveryCenter(models.Model):
     name = models.CharField(max_length=200)

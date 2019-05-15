@@ -1,5 +1,11 @@
 from django.conf.urls import url
+from django.conf.urls.static import static
+from django.conf import settings
 from .views import *
+
+
+
+
 
 urlpatterns = [
     url(r'^$', index, name="index"),
@@ -21,3 +27,6 @@ urlpatterns = [
     url('api/v1/purchases/make-purchase/', MakePurchaseView.as_view(), name="make-purchase"),
     url('api/v1/purchases/process-purchase/', ProcessPurchaseView.as_view(), name="process-purchase"),
 ]
+
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
