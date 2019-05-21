@@ -151,7 +151,7 @@ class ListUserZonesView(generics.ListCreateAPIView):
     serializer_class = UserZoneSerializer
     
     def get_queryset(self):
-        queryset = UserZone.objects.all()
+        queryset = UserZone.objects.order_by('name')[:]
         return queryset
 
 
