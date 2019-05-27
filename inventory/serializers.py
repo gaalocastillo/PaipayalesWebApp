@@ -66,7 +66,7 @@ class PurchaseInfoSerializer(serializers.ModelSerializer):
     user = UserBriefSerializer(required=False)
     class Meta:
         model = Purchase
-        fields = ("id", "products",'barCode','totalPrice','user')
+        fields = ("id", "products",'barCode','totalPrice','dateCreated','user')
 
 class DeliveryCenterSerializer(serializers.ModelSerializer):
     class Meta:
