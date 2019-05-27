@@ -1,7 +1,9 @@
 /env/
 /inventoryms/__pycache__
 /inventory/__pycache__
-
+/migrations/
+tracks/migrations/
+inventory/migrations
 *.pyc
 # Django #
 *.log

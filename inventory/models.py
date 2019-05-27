@@ -175,8 +175,11 @@ class Purchase(models.Model):
     status = models.IntegerField(default=REQUESTED, choices=PURCHASE_STATE_CHOICES)
     barCode = models.CharField(max_length=200, blank=True, null=True, default='{}')
     photo = models.ImageField(upload_to=getOrderEvidenceImagePath, blank=True, null=True)
-    user = models.ManyToManyField(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, related_name='purchases')
+    delivery_man = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='deliveries')
     deliveryCenter = models.ForeignKey(DeliveryCenter, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return str(self.id)
+    class Meta:
+        ordering = ["dateCreated"]
