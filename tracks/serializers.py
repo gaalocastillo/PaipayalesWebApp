@@ -25,6 +25,8 @@ class RouteSerializer(serializers.ModelSerializer):
 	steps = StepSerializer(many=True,read_only=True)
 	origin = PointField()
 	destination = PointField()
+	#purchase = serializers.IntegerField(max_length=255, min_length=4, validators=[])
+	#purchase = serializers.SlugRelatedField(many=False,queryset=Purchase.objects.all(),slug_field='id', required=False)
 
 	class Meta:
 		model = Route

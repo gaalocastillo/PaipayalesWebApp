@@ -11,6 +11,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.gis.geos import Point
 from rest_framework.decorators import api_view
+from datetime import datetime
+from django.core.exceptions import ObjectDoesNotExist
 
 ADMIN = 0
 CLIENT = 1
@@ -70,10 +72,10 @@ def pedidos_por_repartidor(request):
             )
         #obtener usuario de acuerdo al token
         user = User.objects.get(token=meta['HTTP_AUTHORIZATION'])
-        #user = User.objects.get(pk=token)
 
-        purchases = user.purchases.all().values('id', 'dateCreated')
+        purchases = user.deliveries.filter(status=PACKED).values('id', 'user__address')
         purchases = list(purchases)
+        
         response = {}
         response["data"] = purchases
         return JsonResponse(response)
@@ -86,6 +88,8 @@ def pedidos_por_repartidor(request):
 class StepsList(APIView):
     """
     Lista todas las coordenadas de todas las rutas, o crea un par de coordenadas asociadas a una ruta.
+    Para crear un Step se debe seguir el formato:
+    {"latitude":0,"longitude":0,"route":1}
     """
     def get(self, request, format=None):
         steps = Step.objects.all()
@@ -93,20 +97,38 @@ class StepsList(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
+        #se verifica primero que se haya adjuntado el token como header
+        meta = request.META
+        if('HTTP_AUTHORIZATION' not in meta or not User.objects.filter(token=meta['HTTP_AUTHORIZATION']).exists() or  
+            int(User.objects.get(token=meta['HTTP_AUTHORIZATION']).role) != DELIVERY_MAN):
+            return Response(
+                data={
+                    "message": "Authorization denied. No valid authorization header found."
+                },
+                status=status.HTTP_403_FORBIDDEN
+            )
         data = request.data
         if(not "latitude" in data or not "longitude" in data):
             return Response( status=status.HTTP_400_BAD_REQUEST)
 
-        data["location"] = Point(float(data["latitude"]),float(data["longitude"]))
+        #latitude = float(data["latitude"])
+        #longitude = float(data["longitude"])
+        #data["location"] = Point(latitude,longitude)
+        data["location"] = {"latitude":data["latitude"],"longitude":data["longitude"]}
         del data["latitude"]
         del data["longitude"]
-        serializer = StepSerializer(data=data)
-        
+        #Se setea como timestamp la fecha y hora del servidor
+        data["timestamp"] = datetime.now()
+        data["route"] = int(data["route"])
+        serializer = StepSerializer(data=data, partial=True)
+        print(data)
         if serializer.is_valid():
             serializer.save()
             response={}
             response["id"] = serializer.data["id"]
             return JsonResponse(response)
+        print(serializer.errors)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class StepDetail(APIView):
@@ -148,13 +170,39 @@ class RoutesList(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = RouteSerializer(data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
+        #se verifica primero que se haya adjuntado el token como header
+        meta = request.META
+        if('HTTP_AUTHORIZATION' not in meta or not User.objects.filter(token=meta['HTTP_AUTHORIZATION']).exists() or  
+            int(User.objects.get(token=meta['HTTP_AUTHORIZATION']).role) != DELIVERY_MAN):
+            return Response(
+                data={
+                    "message": "Authorization denied. No valid authorization header found."
+                },
+                status=status.HTTP_403_FORBIDDEN
+            )
+        data = request.data
+        #obtener usuario de acuerdo al token
+        user = User.objects.get(token=meta['HTTP_AUTHORIZATION'])
+        #se actualiza el estado del pedido a "en camino"
+        purchase = Purchase.objects.get(pk=data["purchase"])
+        try:
+            print("La ruta existe")
+            route_id = purchase.route.id
             response={}
-            response["id"] = serializer.data["id"]
+            response["id"] = route_id
             return JsonResponse(response)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except ObjectDoesNotExist:
+            purchase.status = TO_BE_SENT
+            purchase.save()
+            #se crea la ruta
+            data["user"] = user.id
+            serializer = RouteSerializer(data=data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                response={}
+                response["id"] = serializer.data["id"]
+                return JsonResponse(response)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class RouteDetail(APIView):
@@ -175,7 +223,7 @@ class RouteDetail(APIView):
     def put(self, request, pk, format=None):
         route = self.get_object(pk)
         serializer = RouteSerializer(route, data=request.data, partial=True)
-        print(serializer)
+    
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data,status=status.HTTP_200_OK)

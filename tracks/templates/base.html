@@ -8,6 +8,8 @@
    integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
    crossorigin=""/>
 <link rel="stylesheet" href="{% static 'tracks/routing/leaflet-routing-machine.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'tracks/routing/leaflet-liveupdate.css' %}" type="text/css">
+
 
 		<link rel="stylesheet" href="{% static 'tracks/css/base_style.css' %}" type="text/css">
 
@@ -20,7 +22,7 @@
    crossorigin=""></script>
 
 <!-- header -->
-<h1><a href="{% url 'home' %}"><img src="{% static 'tracks/img/paipay_logo.jpeg' %}" alt="Paipay" width="300"></a></h1>
+<<h1><a href="{% url 'last_locations' %}"><img src="{% static 'tracks/img/paipay_logo.jpeg' %}" alt="Paipay" width="300"></a></h1>
 <!-- menu -->
 
 	</head>
@@ -28,7 +30,7 @@
 	<body>
 		<ul class="nav">
 	<li>
-			<a href="{% url 'home' %}">Ubicaciones</a>
+			<a href="{% url 'last_locations' %}">Ubicaciones</a>
 	</li>
 	<li>
 			<a href="{% url 'rutas' %}">Rutas</a>
@@ -36,9 +38,9 @@
 	<li>
 			<span><a href="/api">API</a></span>
 	</li>
-	<li>
+	<!--<li>
 			<span><a href="download.html">Documentaci&oacuten</a></span>
-	</li>
+	</li>-->
 	
 	
 </ul>
@@ -51,6 +53,8 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src= "{% static 'tracks/js/base.js' %}"></script>
 	<script src= "{% static 'tracks/routing/leaflet-routing-machine.js' %}"></script>
+	<script src= "{% static 'tracks/routing/leaflet-liveupdate.js' %}"></script>
+
 
 	{% block scripts_body %}
 	{% endblock %}
