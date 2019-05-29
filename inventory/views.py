@@ -52,7 +52,7 @@ class ListProductsView(generics.ListCreateAPIView):
     
     
     def get_queryset(self):
-        cat = self.kwargs['cat'].strip().capitalize()
+        cat = self.kwargs['cat'].lower().strip()
         queryset = Product.objects.filter(category=cat)
         
         return queryset

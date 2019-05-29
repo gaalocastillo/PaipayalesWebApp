@@ -144,6 +144,10 @@ class User(AbstractBaseUser):
 class Category(models.Model):
     name = models.CharField(max_length=100, blank=False, null=False, unique=True)
 
+    def save(self, *args, **kwargs):
+        self.name = self.name.lower().strip()
+        models.Model.save(self, *args, **kwargs)
+
     def __str__(self):
         return self.name
 
