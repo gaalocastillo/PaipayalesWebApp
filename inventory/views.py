@@ -72,7 +72,7 @@ class RegisterUsers(generics.CreateAPIView):
         address = request.data.get("address", "")
         userZone = request.data.get("userZone", "")
         role = request.data.get("role", "")
-        file = request.data['file']
+        file = request.data.get('file', "")
         if not name or not password or not email or not address or not userZone or not phoneNumber or not role:
             return Response(
                 data={
