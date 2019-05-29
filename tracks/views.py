@@ -184,7 +184,7 @@ class RoutesList(APIView):
         #obtener usuario de acuerdo al token
         user = User.objects.get(token=meta['HTTP_AUTHORIZATION'])
         #se actualiza el estado del pedido a "en camino"
-        purchase = Purchase.objects.get(pk=data["purchase"])
+        purchase = Purchase.objects.get(pk=int(data["purchase"]))
         try:
             print("La ruta existe")
             route_id = purchase.route.id
@@ -192,8 +192,9 @@ class RoutesList(APIView):
             response["id"] = route_id
             return JsonResponse(response)
         except ObjectDoesNotExist:
-            purchase.status = TO_BE_SENT
-            purchase.save()
+           # purchase.status = TO_BE_SENT
+           # purchase.save()
+            Purchase.objects.filter(id=int(data['purchase'])).update(status=TO_BE_SENT)
             #se crea la ruta
             data["user"] = user.id
             serializer = RouteSerializer(data=data, partial=True)

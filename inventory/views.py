@@ -312,17 +312,8 @@ class ProcessPurchaseView(generics.CreateAPIView):
                 status=status.HTTP_404_NOT_FOUND
             )
         user = User.objects.get(id=int(userId))
-        purchase = Purchase.objects.get(id=id_)
-        users = purchase.user.all().values()
-        for u in users:
-            if u['role'] == DELIVERY_MAN:
-                userObj = User.objects.get(id=u['id'])
-                purchase.user.remove(userObj)
-        purchase.user.add(user)
-        purchase.barCode = barCode
-        #purchase.photo = photo
-        purchase.status = int(status_)
-        purchase.save()
+        Purchase.objects.filter(id=id_).update(barCode=barCode,status=int(status_),delivery_man=user)
+
         return Response(
                 data={
                     "message": "Purchase updated."
