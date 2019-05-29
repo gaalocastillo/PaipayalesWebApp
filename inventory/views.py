@@ -229,9 +229,10 @@ class ListPurchasesView(generics.ListCreateAPIView):
     def get_queryset(self):
         status = self.request.query_params.get('status', None)
         idCenter = self.request.query_params.get('idCenter', None)
+        print(idCenter)
         queryset = None
         if status and idCenter:
-            queryset = Purchase.objects.filter(status=status, deliveryCenter=idCenter)
+            queryset = Purchase.objects.filter(status=status, deliveryCenter=1)
         #Esto se ejecutara cuando se quiera obtener la lista de pedidos de un repartidor.
         #Para ello, hay que obtener el token de autenticacion del usuario de la cabecera.
         #elif status:
@@ -262,8 +263,9 @@ class MakePurchaseView(generics.CreateAPIView):
             )
         else:
             user = User.objects.get(token=meta['HTTP_AUTHORIZATION'])
-            purchase = Purchase.objects.create(products=products, totalPrice=totalPrice)
-            purchase.user.add(user)
+            print(products)
+            purchase = Purchase.objects.create(products=products, totalPrice=totalPrice, user=user)
+            #purchase.user.add(user)
         return Response(
                 data={
                     "message": "Purchase made."
