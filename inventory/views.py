@@ -203,12 +203,14 @@ class PurchaseInfoView(generics.RetrieveUpdateDestroyAPIView):
         try:
             purchase = self.queryset.get(id=kwargs["pk"])
             products = purchase.products
-            for id_ in products:
+            products = eval(products)
+            for idx in range(len(products)):
                 try:
-                    product = Product.objects.get(id=str(id_))
-                    products[id_]['name'] = product.name                    
+                    obj = products[idx]
+                    product = Product.objects.get(id=str(obj["id"]))
+                    products[idx]['name'] = product.name
                 except:
-                    products[id_]['name'] = None
+                    products[idx]['name'] = None
                     continue
             purchase.products = products
             return Response(PurchaseInfoSerializer(purchase).data)
