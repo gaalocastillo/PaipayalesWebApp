@@ -34,6 +34,7 @@ from rest_framework.response import Response
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from rest_framework.views import status
 from .decorators import validate_request_data
+from django.core import serializers
 
 from django.contrib.auth import authenticate
 from .utils.tokenization import jwt_payload_handler
@@ -197,9 +198,19 @@ class PurchaseStateView(generics.RetrieveUpdateDestroyAPIView):
 class PurchaseInfoView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PurchaseInfoSerializer
     queryset = Purchase.objects.all()
+    import json
     def get(self, request, *args, **kwargs):
         try:
             purchase = self.queryset.get(id=kwargs["pk"])
+            products = purchase.products
+            for id_ in products:
+                try:
+                    product = Product.objects.get(id=str(id_))
+                    products[id_]['name'] = product.name                    
+                except:
+                    products[id_]['name'] = None
+                    continue
+            purchase.products = products
             return Response(PurchaseInfoSerializer(purchase).data)
         except Purchase.DoesNotExist:
             return Response(
