@@ -13,7 +13,7 @@ from django.contrib.gis.geos import Point
 from rest_framework.decorators import api_view
 from datetime import datetime
 from django.core.exceptions import ObjectDoesNotExist
-
+#from django.forms.models import model_to_dict
 ADMIN = 0
 CLIENT = 1
 DELIVERY_MAN = 2
@@ -49,7 +49,8 @@ def home(request):
 
 def rutas(request):
     if request.method == 'GET':
-        return render(request,"rutas.html");
+        repartidores = User.objects.filter(role=DELIVERY_MAN)
+        return render(request,"rutas.html",{"repartidores":repartidores})
 
 @api_view(['GET' ])
 def pedidos_por_repartidor(request):
@@ -121,13 +122,11 @@ class StepsList(APIView):
         data["timestamp"] = datetime.now()
         data["route"] = int(data["route"])
         serializer = StepSerializer(data=data, partial=True)
-        print(data)
         if serializer.is_valid():
             serializer.save()
             response={}
             response["id"] = serializer.data["id"]
             return JsonResponse(response)
-        print(serializer.errors)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -234,3 +233,25 @@ class RouteDetail(APIView):
         route = self.get_object(pk)
         route.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET' ])
+def last_route_deliveryman(request,id_dm):
+    '''
+    End-point que enlista todos los pedidos relacionados a un repartidor.
+    Params: token del repartidor
+    Respuesta: lista de pedidos, dentro de un diccionario con clave data
+    {"data":[]}
+    '''
+    if request.method == 'GET':        
+        #obtener usuario de acuerdo al id
+        user = User.objects.get(id=id_dm)
+        #routes = user.route_set.all()
+        route = user.route_set.latest("init_time")
+        serializer = RouteSerializer(route)
+        return Response(serializer.data)
+        
+    else:
+        return Response(data={
+                    "message": "Bad request."
+                },status=status.HTTP_400_BAD_REQUEST)
