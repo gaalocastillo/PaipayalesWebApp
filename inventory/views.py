@@ -203,7 +203,7 @@ class PurchaseInfoView(generics.RetrieveUpdateDestroyAPIView):
         try:
             purchase = self.queryset.get(id=kwargs["pk"])
             products = purchase.products
-            products = eval(products)
+            products = eval(str(products))
             for idx in range(len(products)):
                 try:
                     obj = products[idx]
