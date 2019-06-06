@@ -29,7 +29,6 @@ function addLeafletRT(dm_id) {
         //get the routes from API
 	$.ajax({url: url,contentType:"application/json", success: function(result){
 	      var data = result;
-	      console.log(result);
 	      layerGroup.clearLayers();
 		    var steps = result.steps;
 		    var steps_len = steps.length;
@@ -72,8 +71,7 @@ function addLeafletRT(dm_id) {
 
 		},
 	    error: function(error){
-	      console.log("bad");
-	      console.log(error);
+	      //console.log(error);
 	    }
 
 	  });
@@ -87,7 +85,7 @@ function addLeafletRT(dm_id) {
 update_control.startUpdating();
 
 var ctrl_container = document.getElementsByClassName("leaflet-control-container")[0];
-        ctrl_container.remove();
+ctrl_container.remove();
 //var ctrl_container = document.getElementsByClassName("leaflet-pane")[0];
       //  ctrl_container.remove();
 document.getElementById("mapdiv").style.visibility='visible';

@@ -12,3 +12,7 @@
 body{
 	background-color: #f7f7f7;
 }
+#form{
+    text-align: center;
+    align-items: baseline;
+}
