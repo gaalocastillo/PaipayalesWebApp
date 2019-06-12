@@ -87,3 +87,10 @@ class ProcessPurchaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Purchase
         fields = ("id", "user", "status", "barCode", "photo",)
+
+class CategorySerializer(serializers.ModelSerializer):
+# https://stackoverflow.com/questions/32219130/django-rest-framework-imagefield-to-server?rq=1
+
+    class Meta:
+        model = Category
+        fields = ("name", "categoryImg", "categoryLabelImg")

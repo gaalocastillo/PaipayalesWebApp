@@ -19,6 +19,7 @@ from .models import PURCHASE_STATE_CHOICES
 from rest_framework import generics
 from rest_framework import permissions
 from .serializers import ProductSerializer
+from .serializers import CategorySerializer
 from .serializers import UserSerializer
 from .serializers import UserZoneSerializer
 from .serializers import LoginSerializer
@@ -49,13 +50,20 @@ class ListProductsView(generics.ListCreateAPIView):
     Provides a get method handler.
     """
     serializer_class = ProductSerializer
-    
-    
-    
+
     def get_queryset(self):
         cat = self.kwargs['cat'].lower().strip()
         queryset = Product.objects.filter(category=cat)
-        
+        return queryset
+
+class ListCategoriesView(generics.ListCreateAPIView):
+    """
+    Provides a get method handler.
+    """
+    serializer_class = CategorySerializer
+
+    def get_queryset(self):
+        queryset = Category.objects.all()
         return queryset
 
 class RegisterUsers(generics.CreateAPIView):

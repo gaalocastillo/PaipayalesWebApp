@@ -18,6 +18,7 @@ urlpatterns = [
     url(r'^api/v1/users/user-zones/$', ListUserZonesView.as_view(), name="user-zones-all"),
     url('api/v1/auth/register/', RegisterUsers.as_view(), name="auth-register"),
     url('api/v1/auth/login/', LoginUser.as_view(), name="auth-login"),
+    url(r'^api/v1/categories/$', ListCategoriesView.as_view(), name="categories-all"),
 
     url(r'^api/v1/users/delivery-men/$', ListDeliveryManView.as_view(), name="delivery-man-all"),
     url(r'^api/v1/purchases/status/(?P<pk>\w+)$', PurchaseStateView.as_view(), name="purchase-state"),
