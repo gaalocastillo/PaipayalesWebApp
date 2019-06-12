@@ -38,9 +38,11 @@ USER_ROLE_CHOICES = (
     (DELIVERY_MAN, "Repartidor"),
 )
 
-PRODUCTS_IMAGES_DIR = 'images/products_pics' 
+PRODUCTS_IMAGES_DIR = 'images/products_pics'
 PROFILE_IMAGES_DIR = 'images/profile_pics'
 ORDER_EVIDENCES_DIR = 'images/orders_evidence_pics'
+CATEGORIES_IMAGES_DIR = 'images/categories_pics'
+CATEGORIES_LABELS_IMAGES_DIR = 'images/categories_labels_pics'
 AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.user')
 
 def get_image_path(instance, filename):
@@ -51,6 +53,12 @@ def getProdImagePath(instance, filename):
 
 def getOrderEvidenceImagePath(instance, filename):
     return '/'.join([ORDER_EVIDENCES_DIR, str(instance.id), filename])
+
+def getCatImagePath(instance, filename):
+    return '/'.join([CATEGORIES_IMAGES_DIR, str(instance.id), filename])
+
+def getCatLabelsImagePath(instance, filename):
+    return '/'.join([CATEGORIES_LABELS_IMAGES_DIR, str(instance.id), filename])
 
 class UserZone(models.Model):
     name = models.CharField(max_length=100, blank=False, null=False, unique=True)
@@ -143,6 +151,8 @@ class User(AbstractBaseUser):
     
 class Category(models.Model):
     name = models.CharField(max_length=100, blank=False, null=False, unique=True)
+    categoryImg = models.ImageField(upload_to=getCatImagePath, blank=True, null=True)
+    categoryLabelImg = models.ImageField(upload_to=getCatLabelsImagePath, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         self.name = self.name.lower().strip()
