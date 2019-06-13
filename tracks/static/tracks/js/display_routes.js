@@ -1,22 +1,37 @@
+function search_dm(){
+	oForm = document.getElementById("form");
+	var selected_index = oForm.elements["delivery_men"].selectedIndex;
+ 
+	if(selected_index >=0){
+	   var selected_dm = oForm.elements["delivery_men"].options[selected_index].value;
+		addLeafletRT(selected_dm);
+	}
+	else{
+	   alert('Por favor seleccione un repartidor');
+	}
 
+}
 
-
-var router = new L.Routing.osrmv1({});
-
-//variables for min and max lat and long
-var minlat = 90;
-var minlon = 180;
-var maxlat = -90;
-var maxlon = -180;
-var update_control = L.control.liveupdate ({
+function addLeafletRT(dm_id) {
+	var router = new L.Routing.osrmv1({});
+	dm_id = dm_id;
+	url = "/tracks/api/v1/latestroute-dm/"+dm_id
+	//variables for min and max lat and long
+	var minlat = 90;
+	var minlon = 180;
+	var maxlat = -90;
+	var maxlon = -180;
+	var layerGroup = L.layerGroup().addTo(mymap);
+	var update_control = L.control.liveupdate ({
     update_map: function () {
+    	//var url = "/tracks/api/v1/routes/";
+    	var dm = "";
         //get the routes from API
-	$.ajax({url: "/tracks/api/v1/routes",contentType:"application/json", success: function(result){
+	$.ajax({url: url,contentType:"application/json", success: function(result){
 	      var data = result;
-	      var data_len = data.length;
-		for(var i=0;i<data_len;i++){
-		    var route = data[i]; //is an array of dictionaries of steps
-		    var steps = route.steps;
+	      console.log(result);
+	      layerGroup.clearLayers();
+		    var steps = result.steps;
 		    var steps_len = steps.length;
 			var wpoints = []; //steps cordinates will be stored here
 
@@ -29,7 +44,7 @@ var update_control = L.control.liveupdate ({
 				wpoints.push( L.Routing.waypoint(coords));
 				//se va a añadir un marcador por la ultima coordenada de la ruta
 				if(j==steps_len-1){
-	        	var marker = L.marker(coords).addTo(mymap);
+	        	var marker = L.marker(coords).addTo(layerGroup);
 				}
 
 				//check for min and max lat and long
@@ -49,8 +64,6 @@ var update_control = L.control.liveupdate ({
 		  							{styles:[{color: 'blue', weight: 9}]}).addTo(mymap);
 				}, null, {});
 		    }
-			
-		}
 		
 		//fit map to markers
 	    c1 = L.latLng(minlat,minlon);
@@ -59,6 +72,7 @@ var update_control = L.control.liveupdate ({
 
 		},
 	    error: function(error){
+	      console.log("bad");
 	      console.log(error);
 	    }
 
@@ -71,3 +85,12 @@ var update_control = L.control.liveupdate ({
 .stopUpdating();
 
 update_control.startUpdating();
+
+var ctrl_container = document.getElementsByClassName("leaflet-control-container")[0];
+        ctrl_container.remove();
+//var ctrl_container = document.getElementsByClassName("leaflet-pane")[0];
+      //  ctrl_container.remove();
+document.getElementById("mapdiv").style.visibility='visible';
+}
+
+//addLeafletRT(11);
