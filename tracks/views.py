@@ -247,10 +247,13 @@ def last_route_deliveryman(request,id_dm):
         #obtener usuario de acuerdo al id
         user = User.objects.get(id=id_dm)
         #routes = user.route_set.all()
-        route = user.route_set.latest("init_time")
-        serializer = RouteSerializer(route)
-        return Response(serializer.data)
-        
+        try:
+            route = user.route_set.latest("init_time")
+            serializer = RouteSerializer(route)
+            return Response(serializer.data)
+        except ObjectDoesNotExist:
+            return JsonResponse({})
+
     else:
         return Response(data={
                     "message": "Bad request."
