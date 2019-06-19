@@ -112,6 +112,13 @@ class RegisterUsers(generics.CreateAPIView):
                 },
                 status=status.HTTP_404_NOT_FOUND
             )
+        if len(User.objects.filter(phoneNumber=phoneNumber)) > 0:
+            return Response(
+                data={
+                    "message": "The phoneNumber entered already has an account associated."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
         new_user = User.objects.create_user(email=email, password=password, phoneNumber=phoneNumber,
                     name=name)
         new_user.address = address
@@ -285,7 +292,8 @@ class MakePurchaseView(generics.CreateAPIView):
         else:
             user = User.objects.get(token=meta['HTTP_AUTHORIZATION'])
             print(products)
-            purchase = Purchase.objects.create(products=products, totalPrice=totalPrice, user=user)
+            dc = DeliveryCenter.objects.get(pk=1)
+            purchase = Purchase.objects.create(products=products, totalPrice=totalPrice, user=user, deliveryCenter=dc)
             #purchase.user.add(user)
         return Response(
                 data={
