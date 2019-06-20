@@ -16,3 +16,11 @@ body{
     text-align: center;
     align-items: baseline;
 }
+#messagediv{
+	height: 5%;
+	visibility: hidden;
+}
+
+#mapdiv{
+	visibility: hidden;
+}
