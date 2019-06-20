@@ -14,12 +14,18 @@ function search_dm(){
 
 }
 
+function removeLeafletControls(){
+	const leaflet_class = "leaflet-control-liveupdate leaflet-bar leaflet-control leaflet-liveupdate-on";
+	var elements = document.getElementsByClassName(leaflet_class);
+	for (i=0 ;i<elements.length; i++) {
+    	elements[i].parentNode.removeChild(elements[i]);
+	}
+}
+
 function addLeafletRT(dm_id) {
 		mapdiv = document.getElementById("mapdiv");
-		mapdiv.style.visibility='visible'; //mostar div del mapa
 		dm_id = dm_id;
 		url = "/tracks/api/v1/latestroute-dm/"+dm_id
-		console.log(url);
 		//variables for min and max lat and long
 		var minlat = 90;
 		var minlon = 180;
@@ -32,7 +38,7 @@ function addLeafletRT(dm_id) {
 	        //get the routes from API
 			$.ajax({url: url,contentType:"application/json", success: function(result){
 		      var data = result;
-		      const leaflet_class = "map leaflet-container leaflet-touch leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom";
+		      
 			  var div = document.getElementById("messagediv");
 
 		      //check if there are steps in the route
@@ -46,6 +52,8 @@ function addLeafletRT(dm_id) {
 			  	return
 			  }
 			  div.style.visibility='hidden'; //esconde el div de mensaje
+			  mapdiv.style.visibility='visible'; //mostar div del mapa
+		      
 		      layerGroup.clearLayers();
 			    var steps = result.steps;
 			    var steps_len = Object.keys(steps).length;
@@ -98,7 +106,7 @@ function addLeafletRT(dm_id) {
 	})
 	.addTo(mymap)
 	.stopUpdating();
-
+	removeLeafletControls();
 	update_control.startUpdating();
 
 	//var ctrl_container = document.getElementsByClassName("leaflet-control-container")[0];
