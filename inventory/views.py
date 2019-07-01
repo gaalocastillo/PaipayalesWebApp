@@ -63,7 +63,7 @@ class ListCategoriesView(generics.ListCreateAPIView):
     serializer_class = CategorySerializer
 
     def get_queryset(self):
-        queryset = Category.objects.all()
+        queryset = Category.objects.order_by('name')[:]
         return queryset
 
 class RegisterUsers(generics.CreateAPIView):
