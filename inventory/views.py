@@ -150,7 +150,8 @@ class LoginUser(generics.CreateAPIView):
             )
         user = authenticate(username=email, password=password)
         if user is not None:
-            data = {'access-token': str(user.token), 'role': int(user.role)}
+            data = {'access-token': str(user.token), 'role': int(user.role), 'name': str(user.name), 
+                    'phone-number': str(user.phoneNumber), 'email': str(user.email), 'address': str(user.address)}
             return HttpResponse(json.dumps(data, ensure_ascii=False).encode("utf-8"), content_type='application/json')
         else:
             return Response(
