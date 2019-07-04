@@ -1,4 +1,5 @@
 router = new L.Routing.osrmv1({});
+time = 1;
 
 function search_dm(){
 	oForm = document.getElementById("form");
@@ -15,7 +16,9 @@ function search_dm(){
 }
 
 function removeLeafletControls(){
-	const leaflet_class = "leaflet-control-liveupdate leaflet-bar leaflet-control leaflet-liveupdate-on";
+	/*Funcion que remueve los botones de pausa e inicio de las actualizaciones en tiempo real
+	*/
+	const leaflet_class = "leaflet-control-liveupdate leaflet-bar leaflet-control";
 	var elements = document.getElementsByClassName(leaflet_class);
 	for (i=0 ;i<elements.length; i++) {
     	elements[i].parentNode.removeChild(elements[i]);
@@ -26,7 +29,7 @@ function addLeafletRT(dm_id) {
 		mapdiv = document.getElementById("mapdiv");
 		dm_id = dm_id;
 		url = "/tracks/api/v1/latestroute-dm/"+dm_id
-		//variables for min and max lat and long
+		//variables de las min y max latitud y longitud
 		var minlat = 90;
 		var minlon = 180;
 		var maxlat = -90;
@@ -35,20 +38,18 @@ function addLeafletRT(dm_id) {
 		var update_control = L.control.liveupdate ({
 	    update_map: function () {
 	    	var dm = "";
-	        //get the routes from API
+	        //obtener la ruta del API
 			$.ajax({url: url,contentType:"application/json", success: function(result){
 		      var data = result;
 		      
 			  var div = document.getElementById("messagediv");
 
-		      //check if there are steps in the route
+		      //verificar que hayan coordenadas dentro de la ruta
 			  if(Object.keys(data).length===0){
-			  	console.log("no hay ruta");
+			  	//esconder mapa y mostrar un mesaje al usuario
 			  	mapdiv.style.visibility = "hidden";
-				//document.getElementById("mapdiv").style.visibility='invisible';
 			  	div.innerHTML="<p> No hay ruta disponible. </p>";
 				div.style.visibility='visible';
-			  	//div.className = div.className.replace(leaflet_class, "");
 			  	return
 			  }
 			  div.style.visibility='hidden'; //esconde el div de mensaje
@@ -59,7 +60,7 @@ function addLeafletRT(dm_id) {
 			    var steps_len = Object.keys(steps).length;
 				var wpoints = []; //steps cordinates will be stored here
 				
-			    //iterate through the steps of the route
+			    //iterar sobre las coordenadas de la ruta
 			    for (j=0; j<steps_len;j++){
 			    	var lat = steps[j].location.latitude;
 			    	var lng = steps[j].location.longitude;
@@ -71,7 +72,7 @@ function addLeafletRT(dm_id) {
 		        	var marker = L.marker(coords).addTo(layerGroup);
 					}
 
-					//check for min and max lat and long
+					//actualizar las coordenadas del bounding box
 
 					if (minlat > lat) minlat = lat;
 				    if (minlon > lng) minlon = lng;
@@ -81,7 +82,7 @@ function addLeafletRT(dm_id) {
 			    }
 			    if(steps_len>0){
 			    	route1plan = L.Routing.plan(wpoints,{draggableWaypoints:false});
-					//draw routes		
+					//dibujar rutas		
 					router.route(wpoints, function(error, routes) {
 						//verificar que todas las coordenadas esten en tierra, no en el mar
 			  			var route1line = L.Routing.line(routes[0], 
@@ -89,10 +90,14 @@ function addLeafletRT(dm_id) {
 					}, null, {});
 			    }
 			
-			//fit map to markers
 		    c1 = L.latLng(minlat,minlon);
 		    c2 = L.latLng(maxlat,maxlon);
-			mymap.fitBounds(L.latLngBounds(c1, c2));
+
+			//acoplar mapa a las coordenadas de bounding box
+		    if(time==1){
+		    	mymap.fitBounds(L.latLngBounds(c1, c2));
+				time++;
+			}
 
 			},
 		    error: function(error){
@@ -109,10 +114,5 @@ function addLeafletRT(dm_id) {
 	removeLeafletControls();
 	update_control.startUpdating();
 
-	//var ctrl_container = document.getElementsByClassName("leaflet-control-container")[0];
-	//ctrl_container.remove();
-	//var ctrl_container = document.getElementsByClassName("leaflet-pane")[0];
-	      //  ctrl_container.remove();
 }
 
-//addLeafletRT(11);
