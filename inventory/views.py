@@ -261,7 +261,7 @@ class ListPurchasesView(generics.ListCreateAPIView):
         print(idCenter)
         queryset = None
         if status and idCenter:
-            queryset = Purchase.objects.filter(status=status, deliveryCenter=1)
+            queryset = Purchase.objects.filter(status=status, deliveryCenter=idCenter)
         #Esto se ejecutara cuando se quiera obtener la lista de pedidos de un repartidor.
         #Para ello, hay que obtener el token de autenticacion del usuario de la cabecera.
         #elif status:
