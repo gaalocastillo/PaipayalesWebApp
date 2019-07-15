@@ -36,6 +36,7 @@ function addLeafletRT(dm_id) {
 		var maxlon = -180;
 		var layerGroup = L.layerGroup().addTo(mymap);
 		var update_control = L.control.liveupdate ({
+		interval: 15000,
 	    update_map: function () {
 	    	var dm = "";
 	        //obtener la ruta del API
@@ -65,8 +66,9 @@ function addLeafletRT(dm_id) {
 			    	var lat = steps[j].location.latitude;
 			    	var lng = steps[j].location.longitude;
 			    	
-		        	coords = L.latLng(lat,lng);
-					wpoints.push( L.Routing.waypoint(coords));
+		        	coords = new L.latLng(lat,lng);
+					//wpoints.push( L.Routing.waypoint(coords));
+					wpoints.push(coords);
 					//se va a añadir un marcador por la ultima coordenada de la ruta
 					if(j==steps_len-1){
 		        	var marker = L.marker(coords).addTo(layerGroup);
@@ -81,13 +83,20 @@ function addLeafletRT(dm_id) {
 
 			    }
 			    if(steps_len>0){
-			    	route1plan = L.Routing.plan(wpoints,{draggableWaypoints:false});
+			    	//var route1line = L.Routing.control({waypoints:wpoints,waypointMode: 'connect',show:false,draggableWaypoints:false,styles:[{color: 'red', weight: 9}]}).addTo(mymap);
+					
+					//Para dibujar polilineas:
+					var routeline = new L.Polyline(wpoints);
+					routeline.addTo(layerGroup);
+					
+
 					//dibujar rutas		
-					router.route(wpoints, function(error, routes) {
+					/*router.route(wpoints, function(error, routes) {
 						//verificar que todas las coordenadas esten en tierra, no en el mar
 			  			var route1line = L.Routing.line(routes[0], 
 			  							{styles:[{color: 'blue', weight: 9}]}).addTo(mymap);
 					}, null, {});
+					*/
 			    }
 			
 		    c1 = L.latLng(minlat,minlon);

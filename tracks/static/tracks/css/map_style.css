@@ -24,3 +24,6 @@ body{
 #mapdiv{
 	visibility: hidden;
 }
+.leaflet-routing-container {
+  display:none;
+}
