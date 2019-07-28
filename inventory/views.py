@@ -30,12 +30,17 @@ from .serializers import DeliveryCenterSerializer
 from .serializers import PurchaseSerializer
 from .serializers import MakePurchaseSerializer
 from .serializers import ProcessPurchaseSerializer
+from .serializers import GenerateNewPasswordSerializer
+
 
 from rest_framework.response import Response
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from rest_framework.views import status
 from .decorators import validate_request_data
 from django.core import serializers
+
+from django.core.mail import send_mail
+from inventoryms.settings import EMAIL_HOST_USER
 
 from django.contrib.auth import authenticate
 from .utils.tokenization import jwt_payload_handler
@@ -376,6 +381,43 @@ class ListUserPurchasesView(generics.ListCreateAPIView):
                 user = User.objects.get(token=meta['HTTP_AUTHORIZATION'])
                 queryset = Purchase.objects.filter(status=status, user=user)
         return queryset
+
+class GenerateNewPasswordView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = GenerateNewPasswordSerializer
+
+    def post(self, request, *args, **kwargs):
+        email = request.data.get("email", "")
+
+        if not email:
+            return Response(
+                data={
+                    "message": "Empty request. Please provide an email address."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        """if not User.objects.filter(email=email).exists():
+            return Response(
+                data={
+                    "message": "User not found."
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )"""
+
+        newPassword = User.objects.make_random_password()
+        user = User.objects.get(email=email)
+        sendNewPasswordEmail(newPassword, user.email)
+        return Response(
+                data={
+                    "message": "Password updated."
+                },
+                status = status.HTTP_200_OK
+            )
+
+def sendNewPasswordEmail(password, email):
+    EMAIL_SUBJECT = 'Paipayales - Restauración de contraseña'
+    EMAIL_MESSAGE = 'Su nueva contraseña para autenticarse en su cuenta de Paipayales es: ' + str(password)
+    send_mail(EMAIL_SUBJECT, EMAIL_MESSAGE, EMAIL_HOST_USER, [email], fail_silently=False,)
 
 def isValidStatus(status):
     for e in PURCHASE_STATE_CHOICES:

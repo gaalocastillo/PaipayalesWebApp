@@ -35,8 +35,6 @@ class UserBriefSerializer(serializers.ModelSerializer):
         model = User
         fields = ("name", "phoneNumber","address", "userZone")
 
-
-
 class LoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -94,3 +92,8 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ("name", "categoryImg", "categoryLabelImg")
+
+class GenerateNewPasswordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("email")
