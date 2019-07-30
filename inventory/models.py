@@ -49,7 +49,8 @@ def get_image_path(instance, filename):
     return '/'.join([PROFILE_IMAGES_DIR, str(instance.email), filename])
 
 def getProdImagePath(instance, filename):
-    return '/'.join([PRODUCTS_IMAGES_DIR, str(instance.id), filename])
+    #return '/'.join([PRODUCTS_IMAGES_DIR, str(instance.id), filename])
+    return '/'.join([PRODUCTS_IMAGES_DIR,  filename])
 
 def getOrderEvidenceImagePath(instance, filename):
     return '/'.join([ORDER_EVIDENCES_DIR, str(instance.id), filename])

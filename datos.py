@@ -10,7 +10,6 @@ django.setup()
 
 from inventory.models import *
 from inventory.utils.tokenization import create_token
-"""
 ####### UserZone ####################33
 norte = UserZone.objects.create(name="Norte")
 sur = UserZone.objects.create(name="Sur")
@@ -101,43 +100,134 @@ delivery_4.token = str(token)
 delivery_4.name = "delivery 4"
 delivery_4.save()
 
-
 category_1 = Category.objects.create(name="Frutas")
 category_2 = Category.objects.create(name="Verduras")
 category_3 = Category.objects.create(name="Organico")
 category_4 = Category.objects.create(name="Arroz")
 
-product_1 = Product.objects.create(name="ciruela",typeSelling="unit",price=12.2,category=category_1)
-product_1.photo = "1.jpg"
+product_1 = Product.objects.create(name="ciruela",typeSelling="Libra",price=1.0,category=category_1)
+product_1.photo = "images/products_pics/fruits/ciruela.png"
 product_1.save()
 
-product_2 = Product.objects.create(name="guaba",typeSelling="unit",price=14.2,category=category_1)
-product_2.photo = "2.jpg"
+product_2 = Product.objects.create(name="guaba",typeSelling="Libra",price=1.0,category=category_1)
+product_2.photo = "images/products_pics/fruits/guaba.png"
 product_2.save()
 
-product_3 = Product.objects.create(name="pimiento",typeSelling="unit",price=14.2,category=category_2)
-product_3.photo = "2.jpg"
+product_3 = Product.objects.create(name="guayaba",typeSelling="Libra",price=1.0,category=category_1)
+product_3.photo = "images/products_pics/fruits/guayaba.png"
 product_3.save()
 
-product_4 = Product.objects.create(name="tomate",typeSelling="unit",price=14.2,category=category_2)
-product_4.photo = "2.jpg"
+product_4 = Product.objects.create(name="limon",typeSelling="Libra",price=1.0,category=category_1)
+product_4.photo = "images/products_pics/fruits/limon.png"
 product_4.save()
 
-product_5 = Product.objects.create(name="dulce de leche",typeSelling="unit",price=14.2,category=category_3)
-product_5.photo = "2.jpg"
+product_5 = Product.objects.create(name="mango de chupar",typeSelling="Libra",price=1.0,category=category_1)
+product_5.photo = "images/products_pics/fruits/mangoDeChupar.png"
 product_5.save()
 
-product_6 = Product.objects.create(name="huevo",typeSelling="unit",price=14.2,category=category_3)
-product_6.photo = "2.jpg"
+product_6 = Product.objects.create(name="mango Paipay",typeSelling="Libra",price=1.0,category=category_1)
+product_6.photo = "images/products_pics/fruits/mangoPaipay.png"
 product_6.save()
 
-product_7 = Product.objects.create(name="arroz corriente",typeSelling="unit",price=14.2,category=category_4)
-product_7.photo = "2.jpg"
+product_7 = Product.objects.create(name="naranja",typeSelling="Libra",price=1.0,category=category_1)
+product_7.photo = "images/products_pics/fruits/naranja.png"
 product_7.save()
 
-product_8 = Product.objects.create(name="arroz grano largo",typeSelling="unit",price=14.2,category=category_4)
-product_8.photo = "2.jpg"
+product_8 = Product.objects.create(name="platano",typeSelling="Libra",price=1.0,category=category_1)
+product_8.photo = "images/products_pics/fruits/platanoMaduro.png"
 product_8.save()
+
+product_9 = Product.objects.create(name="platano verde",typeSelling="Libra",price=1.0,category=category_1)
+product_9.photo = "images/products_pics/fruits/platanoVerde.png"
+product_9.save()
+
+product_10 = Product.objects.create(name="tamarindo",typeSelling="Libra",price=1.0,category=category_1)
+product_10.photo = "images/products_pics/fruits/tamarindo.png"
+product_10.save()
+
+product_11 = Product.objects.create(name="camote",typeSelling="Libra",price=1.0,category=category_2)
+product_11.photo = "images/products_pics/vegetables/camote.png"
+product_11.save()
+
+product_12 = Product.objects.create(name="frejól",typeSelling="Libra",price=1.0,category=category_2)
+product_12.photo = "images/products_pics/vegetables/frejol.png"
+product_12.save()
+
+product_13 = Product.objects.create(name="frejól de palo",typeSelling="Libra",price=1.0,category=category_2)
+product_13.photo = "images/products_pics/vegetables/frejolDePalo.png"
+product_13.save()
+
+product_14 = Product.objects.create(name="maíz",typeSelling="Libra",price=1.0,category=category_2)
+product_14.photo = "images/products_pics/vegetables/maiz.png"
+product_14.save()
+
+product_15 = Product.objects.create(name="pimiento",typeSelling="Libra",price=1.0,category=category_2)
+product_15.photo = "images/products_pics/vegetables/pimiento.png"
+product_15.save()
+
+product_16 = Product.objects.create(name="tomate",typeSelling="Libra",price=1.0,category=category_2)
+product_16.photo = "images/products_pics/vegetables/tomate.png"
+product_16.save()
+
+product_17 = Product.objects.create(name="verdura",typeSelling="Libra",price=1.0,category=category_2)
+product_17.photo = "images/products_pics/vegetables/verdura.png"
+product_17.save()
+
+product_18 = Product.objects.create(name="yuca",typeSelling="Libra",price=1.0,category=category_2)
+product_18.photo = "images/products_pics/vegetables/yuca.png"
+product_18.save()
+
+product_19 = Product.objects.create(name="arroz con leche",typeSelling="Unidad",price=1.0,category=category_3)
+product_19.photo = "images/products_pics/organics/arrozConLeche.png"
+product_19.save()
+
+product_20 = Product.objects.create(name="huevos",typeSelling="Unidad",price=1.0,category=category_3)
+product_20.photo = "images/products_pics/organics/huevos.png"
+product_20.save()
+
+product_21 = Product.objects.create(name="humita",typeSelling="Unidad",price=1.0,category=category_3)
+product_21.photo = "images/products_pics/organics/humitas.png"
+product_21.save()
+
+product_22 = Product.objects.create(name="maní",typeSelling="Unidad",price=1.0,category=category_3)
+product_22.photo = "images/products_pics/organics/mani.png"
+product_22.save()
+
+product_23 = Product.objects.create(name="masa de yuca",typeSelling="Unidad",price=1.0,category=category_3)
+product_23.photo = "images/products_pics/organics/masaDeYuca.png"
+product_23.save()
+
+product_24 = Product.objects.create(name="mazamorra",typeSelling="Unidad",price=1.0,category=category_3)
+product_24.photo = "images/products_pics/organics/mazamorra.png"
+product_24.save()
+
+product_25 = Product.objects.create(name="mermelada de mango",typeSelling="Unidad",price=1.0,category=category_3)
+product_25.photo = "images/products_pics/organics/mermeladaDeMango.png"
+product_25.save()
+
+product_26 = Product.objects.create(name="torta",typeSelling="Unidad",price=1.0,category=category_3)
+product_26.photo = "images/products_pics/organics/torta.png"
+product_26.save()
+
+product_27 = Product.objects.create(name="tortilla",typeSelling="Unidad",price=1.0,category=category_3)
+product_27.photo = "images/products_pics/organics/tortilla.png"
+product_27.save()
+
+product_28 = Product.objects.create(name="arroz corriente",typeSelling="Libra",price=1.0,category=category_4)
+product_28.photo = "images/products_pics/rices/arrozCorriente.png"
+product_28.save()
+
+product_29 = Product.objects.create(name="arroz envejecido",typeSelling="Libra",price=1.0,category=category_4)
+product_29.photo = "images/products_pics/rices/arrozEnvejecido.png"
+product_29.save()
+
+product_30 = Product.objects.create(name="arroz grano largo",typeSelling="Libra",price=1.0,category=category_4)
+product_30.photo = "images/products_pics/rices/arrozGranoLargo.jpg"
+product_30.save()
+
+product_31 = Product.objects.create(name="arroz orgánico",typeSelling="Libra",price=1.0,category=category_4)
+product_31.photo = "images/products_pics/rices/arrozOrganico.jpg"
+product_31.save()
 
 centro_1 = DeliveryCenter.objects.create(name="Principal, Paipay", latitudeGeo=2.1, longitudeGeo=3.1)
 centro_2 = DeliveryCenter.objects.create(name="Secundario, Norte", latitudeGeo=3.1, longitudeGeo=2.1)
@@ -146,126 +236,83 @@ centro_3 = DeliveryCenter.objects.create(name="Secundario, Sur", latitudeGeo=4.1
 ####### pedidos ########################
 products_list_1 = []
 print(product_2.id)
-products_list_1.append({"id":product_1.id.urn[9:], "cantidad": 2})
-products_list_1.append({"id":product_2.id.urn[9:], "cantidad": 3})
+products_list_1.append({"id":product_1.id.urn[9:], "qty": 2})
+products_list_1.append({"id":product_2.id.urn[9:], "qty": 3})
 products_list_1= json.dumps(products_list_1)
 print(product_2.id)
 
 products_list_2 = []
-products_list_2.append({"id":product_3.id.urn[9:], "cantidad": 4})
-products_list_2.append({"id":product_4.id.urn[9:], "cantidad": 5})
-products_list_2.append({"id":product_5.id.urn[9:], "cantidad": 3})
-products_list_2.append({"id":product_5.id.urn[9:], "cantidad": 6})
+products_list_2.append({"id":product_3.id.urn[9:], "qty": 4})
+products_list_2.append({"id":product_4.id.urn[9:], "qty": 5})
+products_list_2.append({"id":product_5.id.urn[9:], "qty": 3})
+products_list_2.append({"id":product_5.id.urn[9:], "qty": 6})
 products_list_2= json.dumps(products_list_2)
 
 products_list_3 = []
-products_list_3.append({"id":product_6.id.urn[9:], "cantidad": 3})
-products_list_3.append({"id":product_7.id.urn[9:], "cantidad": 4})
+products_list_3.append({"id":product_6.id.urn[9:], "qty": 3})
+products_list_3.append({"id":product_7.id.urn[9:], "qty": 4})
 products_list_3= json.dumps(products_list_3)
-"""
 ########### estado solIcitado
 SOLICITADO = 0
-centro_1 = DeliveryCenter.objects.get(name="Principal, Paipay")
-comprador = User.objects.get(email='client1@hotmail.com')
-purchase_1 = Purchase.objects.create(deliveryCenter=centro_1,totalPrice=12.2, status=SOLICITADO, user=comprador )
+purchase_1 = Purchase.objects.create(deliveryCenter=centro_1,totalPrice=12.2, status=SOLICITADO, user=client_1)
 purchase_1.products = products_list_1
 purchase_1.save()
-#purchase_1.user.add(client_1)
-purchase_1.user.add(delivery_1)
-purchase_1.save()
 
-comprador2 = User.objects.get(email='client2@hotmail.com')
-purchase_2 = Purchase.objects.create(deliveryCenter=centro_1,totalPrice=12.2, status=SOLICITADO, user=comprador2)
+purchase_2 = Purchase.objects.create(deliveryCenter=centro_1,totalPrice=12.2, status=SOLICITADO,user=client_2)
 purchase_2.products = products_list_2
 purchase_2.save()
-#purchase_2.user.add(client_2)
-purchase_2.user.add(delivery_1)
-purchase_2.save()
 
-"""
-purchase_3 = Purchase.objects.create(deliveryCenter=centro_1,totalPrice=12.2, status=SOLICITADO)
+purchase_3 = Purchase.objects.create(deliveryCenter=centro_1,totalPrice=12.2, status=SOLICITADO, user=client_3)
 purchase_3.products = products_list_3
 purchase_3.save()
-purchase_3.user.add(client_3)
-purchase_3.user.add(delivery_1)
-purchase_3.save()
 
-purchase_4 = Purchase.objects.create(deliveryCenter=centro_1,totalPrice=12.2, status=SOLICITADO)
+purchase_4 = Purchase.objects.create(deliveryCenter=centro_1,totalPrice=12.2, status=SOLICITADO,user=client_1)
 purchase_4.products = products_list_1
 purchase_4.save()
-purchase_4.user.add(client_1)
-purchase_4.user.add(delivery_1)
-purchase_4.save()
 
-purchase_5 = Purchase.objects.create(deliveryCenter=centro_1,totalPrice=13.2, status=SOLICITADO)
+purchase_5 = Purchase.objects.create(deliveryCenter=centro_1,totalPrice=13.2, status=SOLICITADO,user=client_2)
 purchase_5.products = products_list_2
 purchase_5.save()
-purchase_5.user.add(client_2)
-purchase_5.user.add(delivery_2)
-purchase_5.save()
 
-purchase_6 = Purchase.objects.create(deliveryCenter=centro_1,totalPrice=13.2, status=SOLICITADO)
+purchase_6 = Purchase.objects.create(deliveryCenter=centro_1,totalPrice=13.2, status=SOLICITADO,user=client_1)
 purchase_6.products = products_list_2
 purchase_6.save()
-purchase_6.user.add(client_1)
-purchase_6.user.add(delivery_2)
-purchase_6.save()
 
-purchase_7 = Purchase.objects.create(deliveryCenter=centro_1,totalPrice=13.2, status=SOLICITADO)
+purchase_7 = Purchase.objects.create(deliveryCenter=centro_1,totalPrice=13.2, status=SOLICITADO, user=client_3)
 purchase_7.products = products_list_2
 purchase_7.save()
-purchase_7.user.add(client_3)
-purchase_7.user.add(delivery_2)
-purchase_7.save()
 
-purchase_8 = Purchase.objects.create(deliveryCenter=centro_1,totalPrice=13.2, status=SOLICITADO)
+purchase_8 = Purchase.objects.create(deliveryCenter=centro_1,totalPrice=13.2, status=SOLICITADO, user=client_3)
 purchase_8.products = products_list_3
 purchase_8.save()
-purchase_8.user.add(client_3)
-purchase_8.user.add(delivery_3)
-purchase_8.save()
 
-purchase_9 = Purchase.objects.create(deliveryCenter=centro_1,totalPrice=13.2, status=SOLICITADO)
+purchase_9 = Purchase.objects.create(deliveryCenter=centro_1,totalPrice=13.2, status=SOLICITADO,user=client_3)
 purchase_9.products = products_list_1
-purchase_9.save()
-purchase_9.user.add(client_3)
-purchase_9.user.add(delivery_3)
 purchase_9.save()
 
 ########### estado armado
 ARMADO = 1
-purchase_10 = Purchase.objects.create(deliveryCenter=centro_1,totalPrice=13.2, status=ARMADO, barCode="000000000001")
+purchase_10 = Purchase.objects.create(deliveryCenter=centro_1,totalPrice=13.2, status=ARMADO, barCode="000000000001",user=client_1)
 purchase_10.products = products_list_1
-purchase_10.save()
-purchase_10.user.add(client_1)
-purchase_10.user.add(delivery_1)
+purchase_10.delivery_man = delivery_1
 purchase_10.save()
 
-purchase_11 = Purchase.objects.create(deliveryCenter=centro_1,totalPrice=13.2, status=ARMADO, barCode="000000000002")
+purchase_11 = Purchase.objects.create(deliveryCenter=centro_1,totalPrice=13.2, status=ARMADO, barCode="000000000002", user=client_2)
 purchase_11.products = products_list_1
-purchase_11.save()
-purchase_11.user.add(client_2)
-purchase_11.user.add(delivery_1)
+purchase_11.delivery_man = delivery_1
 purchase_11.save()
 
-purchase_12 = Purchase.objects.create(deliveryCenter=centro_1,totalPrice=13.2, status=ARMADO, barCode="000000000003")
+purchase_12 = Purchase.objects.create(deliveryCenter=centro_1,totalPrice=13.2, status=ARMADO, barCode="000000000003",user=client_3)
 purchase_12.products = products_list_1
-purchase_12.save()
-purchase_12.user.add(client_3)
-purchase_12.user.add(delivery_1)
+purchase_12.delivery_man = delivery_1
 purchase_12.save()
 
-purchase_13 = Purchase.objects.create(deliveryCenter=centro_1,totalPrice=13.2, status=ARMADO, barCode="000000000004")
+purchase_13 = Purchase.objects.create(deliveryCenter=centro_1,totalPrice=13.2, status=ARMADO, barCode="000000000004",user=client_2)
 purchase_13.products = products_list_1
-purchase_13.save()
-purchase_13.user.add(client_2)
-purchase_13.user.add(delivery_2)
+purchase_13.delivery_man = delivery_2
 purchase_13.save()
 
-purchase_14 = Purchase.objects.create(deliveryCenter=centro_1,totalPrice=13.2, status=ARMADO, barCode="000000000005")
+purchase_14 = Purchase.objects.create(deliveryCenter=centro_1,totalPrice=13.2, status=ARMADO, barCode="000000000005",user=client_3)
 purchase_14.products = products_list_1
+purchase_14.delivery_man = delivery_2
 purchase_14.save()
-purchase_14.user.add(client_3)
-purchase_14.user.add(delivery_2)
-purchase_14.save()
-"""
