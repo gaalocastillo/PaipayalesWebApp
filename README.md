@@ -10,6 +10,7 @@
 
 2. Install dependencies
 	```
+	source env/bin/active
 	pip install -r requirements.txt
 	```
 3. Create database
@@ -32,4 +33,9 @@
 	```
 	./manage.py runserver 0:9090
 	```
+6. create data for test
+        ```
+        python datos.py
+        ```
+
 
