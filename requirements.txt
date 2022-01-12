@@ -9,7 +9,7 @@ django-cors-headers==2.5.2
 djangorestframework-jwt==1.11.0
 pygdal
 jsonfield==2.0.2
-pipenv==2018.11.26
+pipenv==2022.1.8
 simplejson==3.16.0
 django-extra-fields
 #channels
